@@ -5,16 +5,17 @@
 class Board
 {
 public:
-    Board(const ElementsMatrix &em);
+    Board(const ElementsMatrix &m);
 
-    bool isDone() const;
     bool move(Direction d);
+    bool is_done() const;
 
+    ElementsMatrix to_matrix() const;
 
-    // matrix api
-    bool isInBoard(Pos p) const { return m_matrix.isInMatrix(p); }
 private:
-    ElementsMatrix m_matrix;
+    ElementsMatrix matrix;
+    Pos man_pos;
+    PosVector des_vec;
 };
 
 #endif // BOARD_H

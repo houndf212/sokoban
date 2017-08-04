@@ -10,9 +10,12 @@
 #include "elements.h"
 #include "movedirection.h"
 
-typedef Basic_Pos<int> Pos;
-typedef Basic_Resize_Matrix<int, int> IntMatrix;
-typedef Basic_Resize_Matrix<Elements, int> ElementsMatrix;
+typedef int value_type;
+typedef int size_type;
+
+typedef Basic_Pos<size_type> Pos;
+typedef Basic_Resize_Matrix<value_type, size_type> IntMatrix;
+typedef Basic_Resize_Matrix<Elements, size_type> ElementsMatrix;
 
 typedef std::vector<Pos> PosVector;
 typedef std::list<Pos> PosList;

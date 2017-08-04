@@ -4,20 +4,20 @@
 #include <assert.h>
 #include "basic_pos.h"
 
-template<typename T, typename S = int>
+template<typename T, typename S>
 class Basic_Resize_Matrix
 {
 public:
     typedef T value_type;
     typedef S size_type;
 
-    void resize(size_type x, size_type y)
+    void resize(size_type row, size_type col)
     {
-        n_x = x;
-        n_y = y;
+        n_row = row;
+        n_col = col;
 
-        std::vector<value_type> vec(n_y, value_type());
-        m = std::vector<std::vector<value_type>>(x, vec);
+        std::vector<value_type> vec(n_col, value_type());
+        m = std::vector<std::vector<value_type>>(row, vec);
     }
 
     void fill(value_type val)
@@ -31,42 +31,42 @@ public:
     value_type get(Basic_Pos<U> p) const
     {
         assert(isInMatrix(p));
-        return m[p.x()][p.y()];
+        return m[p.row()][p.col()];
     }
 
     template<typename U>
     void set(Basic_Pos<U> p, value_type val)
     {
         assert(isInMatrix(p));
-        m[p.x()][p.y()] = val;
+        m[p.row()][p.col()] = val;
     }
 
     template<typename U>
     bool isInMatrix(Basic_Pos<U> p) const
     {
-        return 0<=p.x() && p.x()<x_size() && 0<=p.y() && p.y()<y_size();
+        return 0<=p.row() && p.row()<row_size() && 0<=p.col() && p.col()<col_size();
     }
 
-    size_type x_size() const { return n_x; }
-    size_type y_size() const { return n_y; }
+    size_type row_size() const { return n_row; }
+    size_type col_size() const { return n_col; }
 
     bool equal(const Basic_Resize_Matrix& bm)
     {
-        assert(x_size() == bm.x_size());
-        assert(y_size() == bm.y_size());
+        assert(row_size() == bm.row_size());
+        assert(col_size() == bm.col_size());
         return m == bm.m;
     }
 
     bool less(const Basic_Resize_Matrix& bm)
     {
-        assert(x_size() == bm.x_size());
-        assert(y_size() == bm.y_size());
+        assert(row_size() == bm.row_size());
+        assert(col_size() == bm.col_size());
         return m < bm.m;
     }
 
 private:
-    size_type n_x;
-    size_type n_y;
+    size_type n_row;
+    size_type n_col;
     std::vector<std::vector<value_type>> m;
 };
 

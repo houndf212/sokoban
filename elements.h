@@ -6,7 +6,7 @@ enum class Elements
     Wall,
     Space,
     Box,
-    Human,
+    Man,
     Destination,
 };
 

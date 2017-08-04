@@ -8,21 +8,22 @@ class Basic_Pos
 public:
     typedef T value_type;
 
-    Basic_Pos(T x=0, T y=0) : m_x(x), m_y(y) {}
+    Basic_Pos() = default;
+    Basic_Pos(T row, T col) : m_row(row), m_col(col) {}
 
-    const T& x() const { return m_x; }
-    const T& y() const { return m_y; }
+    const T& row() const { return m_row; }
+    const T& col() const { return m_col; }
 
-    T& x() { return m_x; }
-    T& y() { return m_y; }
+    T& row() { return m_row; }
+    T& col() { return m_col; }
 
     bool equal(const Basic_Pos& p) const
     {
-        return x() == p.x() && y() == p.y();
+        return row() == p.row() && col() == p.col();
     }
 private:
-    T m_x;
-    T m_y;
+    T m_row;
+    T m_col;
 };
 
 template<class T>
@@ -40,7 +41,7 @@ inline bool operator!=(const Basic_Pos<T> &p1, const Basic_Pos<T> &p2)
 template<class T>
 inline T Manhattan_Distance(const Basic_Pos<T> &p1, const Basic_Pos<T> &p2)
 {
-    return std::abs(p1.x()-p2.x())+std::abs(p1.y()-p2.y());
+    return std::abs(p1.row()-p2.row())+std::abs(p1.col()-p2.col());
 }
 
 #endif // BASIC_POS_H
