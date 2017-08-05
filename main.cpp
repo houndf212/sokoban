@@ -1,5 +1,6 @@
 ﻿#include <QApplication>
-#include "types.h"
+#include "boardwidget.h"
+#include "xsb.h"
 #include "debug_print.h"
 
 void test()
@@ -8,13 +9,16 @@ void test()
     extern void test_console_board();
     test_console_board();
 }
+
 int main(int argc, char *argv[])
 {
+    //    test();
     QApplication a(argc, argv);
 
-    test();
-//    return a.exec();
+    ElementsMatrix m = XSB::from_file("board.xsb");
 
-
-    return 0;
+    BoardWidget w;
+    w.setMatrix(m);
+    w.show();
+    return a.exec();
 }

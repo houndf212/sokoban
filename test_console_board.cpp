@@ -1,34 +1,39 @@
 ﻿#include "board.h"
 #include "debug_print.h"
-#include "consoleboard.h"
+#include "xsb.h"
 #include <iostream>
 using namespace std;
 
 void test_console_board()
 {
-    ElementsMatrix m = ConsoleBoard::from_file("board.txt");
+    ElementsMatrix m = XSB::from_file("board.xsb");
 
     print(m);
 
-    Board board(m);
+    Board board;
+    board.setMatrix(m);
     while (!board.is_done()) {
         char c;
         cin>>c;
+        Direction d = Direction::NotValid;
         switch (c) {
         case 'w':
-            board.move(Direction::up);
+            d = Direction::up;
             break;
         case 's':
-            board.move(Direction::down);
+            d = Direction::down;
             break;
         case 'a':
-            board.move(Direction::left);
+            d = Direction::left;
             break;
         case 'd':
-            board.move(Direction::right);
+            d = Direction::right;
             break;
         default:
             break;
+        }
+        if (d!=Direction::NotValid && board.move(d)) {
+            cout << "move: "<<XSB::d_to_char(d)<<endl;
         }
         print(board.to_matrix());
     }

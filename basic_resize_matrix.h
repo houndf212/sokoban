@@ -11,6 +11,8 @@ public:
     typedef T value_type;
     typedef S size_type;
 
+    static constexpr size_type zero() { return S(0); }
+
     void resize(size_type row, size_type col)
     {
         n_row = row;

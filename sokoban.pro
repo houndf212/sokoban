@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = sokoban
 TEMPLATE = app
-CONFIG += console
+#CONFIG += console
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked as deprecated (the exact warnings
@@ -30,7 +30,9 @@ SOURCES += main.cpp \
     board_api.cpp \
     test_print.cpp \
     test_console_board.cpp \
-    consoleboard.cpp
+    xsb.cpp \
+    imagesource.cpp \
+    boardwidget.cpp
 
 HEADERS  += \
     elements.h \
@@ -41,4 +43,9 @@ HEADERS  += \
     movedirection.h \
     board.h \
     board_api.h \
-    consoleboard.h
+    xsb.h \
+    imagesource.h \
+    boardwidget.h
+
+RESOURCES += \
+    image.qrc

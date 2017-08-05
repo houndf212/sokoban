@@ -24,11 +24,6 @@ constexpr Direction_t toInt()
     return static_cast<Direction_t>(d);
 }
 
-inline Direction_t toInt(Direction d)
-{
-    return static_cast<Direction_t>(d);
-}
-
 inline bool is_reverse(Direction d1, Direction d2)
 {
     static_assert((toInt<Direction::up>()&toInt<Direction::down>()) == 0, "");
@@ -40,7 +35,7 @@ inline bool is_reverse(Direction d1, Direction d2)
     static_assert((toInt<Direction::down>()&toInt<Direction::right>()) != 0, "");
     static_assert((toInt<Direction::down>()&toInt<Direction::left>()) != 0, "");
 
-    return (toInt(d1)&toInt(d2)) == 0;
+    return (Direction_t(d1)&Direction_t(d2)) == 0;
 }
 
 inline Direction reverse(Direction d)
@@ -53,17 +48,27 @@ inline Direction reverse(Direction d)
     static_assert((full^toInt<Direction::right>()) == toInt<Direction::left>(), "");
     static_assert((full^toInt<Direction::left>()) == toInt<Direction::right>(), "");
 
-    return Direction(toInt(d)^full);
+    return Direction(Direction_t(d)^full);
 }
 
 inline bool is_push(Direction d)
 {
-    return (toInt(d) & toInt<Direction::push>()) == toInt<Direction::push>();
+    static_assert((toInt<Direction::push_up>() & toInt<Direction::push>()) == toInt<Direction::push>(),"");
+    static_assert((toInt<Direction::push_down>() & toInt<Direction::push>()) == toInt<Direction::push>(),"");
+    static_assert((toInt<Direction::push_right>() & toInt<Direction::push>()) == toInt<Direction::push>(),"");
+    static_assert((toInt<Direction::push_left>() & toInt<Direction::push>()) == toInt<Direction::push>(),"");
+
+    return (Direction_t(d) & toInt<Direction::push>()) == toInt<Direction::push>();
 }
 
 inline Direction add_push(Direction d)
 {
+    static_assert((toInt<Direction::up>() | toInt<Direction::push>()) == toInt<Direction::push_up>(),"");
+    static_assert((toInt<Direction::down>() | toInt<Direction::push>()) == toInt<Direction::push_down>(),"");
+    static_assert((toInt<Direction::right>() | toInt<Direction::push>()) == toInt<Direction::push_right>(),"");
+    static_assert((toInt<Direction::left>() | toInt<Direction::push>()) == toInt<Direction::push_left>(),"");
+
     assert(d != Direction::NotValid);
-    return Direction(toInt(d) | toInt<Direction::push>());
+    return Direction(Direction_t(d) | toInt<Direction::push>());
 }
 #endif // MOVEDIRECTION_H

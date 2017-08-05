@@ -5,9 +5,11 @@
 class Board
 {
 public:
-    Board(const ElementsMatrix &m);
+    Board() = default;
 
-    bool move(Direction d);
+    void setMatrix(const ElementsMatrix &m);
+
+    bool move(Direction &d);
     bool is_done() const;
 
     ElementsMatrix to_matrix() const;

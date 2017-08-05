@@ -1,6 +1,6 @@
 ﻿#include "debug_print.h"
 #include "types.h"
-#include "consoleboard.h"
+#include "xsb.h"
 #include <iostream>
 using namespace std;
 
@@ -13,10 +13,10 @@ void print(const Pos &p)
 template<>
 void print(const ElementsMatrix &m)
 {
-    for (auto row=0; row<m.row_size(); ++row) {
-        for (auto col=0; col<m.col_size(); ++col) {
+    for (auto row=m.zero(); row<m.row_size(); ++row) {
+        for (auto col=m.zero(); col<m.col_size(); ++col) {
             auto e = m.get(Pos(row, col));
-            cout<<ConsoleBoard::to_char(e);
+            cout<<XSB::e_to_char(e);
             cout<<" ";
         }
         cout<<endl;
