@@ -33,7 +33,11 @@ SOURCES += main.cpp \
     xsb.cpp \
     imagesource.cpp \
     boardwidget.cpp \
-    boardparam.cpp
+    boardparam.cpp \
+    roomslice.cpp \
+    boxmover.cpp \
+    movelist.cpp \
+    test_boxmover.cpp
 
 HEADERS  += \
     elements.h \
@@ -47,7 +51,10 @@ HEADERS  += \
     xsb.h \
     imagesource.h \
     boardwidget.h \
-    boardparam.h
+    boardparam.h \
+    roomslice.h \
+    boxmover.h \
+    movelist.h
 
 RESOURCES += \
     image.qrc

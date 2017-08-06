@@ -9,6 +9,8 @@ class BoardParam
 public:
     void set_matrix(const ElementsMatrix &m);
 
+    bool is_goal(Pos p) const;
+
     //人所在的位置
     Pos man_pos;
     //目标位置

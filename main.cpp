@@ -8,12 +8,14 @@ void test()
 {
     extern void test_print();
     extern void test_console_board();
-    test_console_board();
+    extern void test_boxmover();
+    test_boxmover();
 }
 
 int main(int argc, char *argv[])
 {
-    //    test();
+//    test();
+//    return 0;
     QApplication a(argc, argv);
 
     ElementsMatrix m = XSB::from_file("board.xsb");

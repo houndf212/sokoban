@@ -1,5 +1,8 @@
 ﻿#include "board.h"
 #include "board_api.h"
+#include "roomslice.h"
+#include "boxmover.h"
+#include <QDebug>
 
 void Board::setMatrix(const ElementsMatrix &m)
 {
