@@ -1,23 +1,21 @@
 ﻿#ifndef BOARD_H
 #define BOARD_H
-#include "types.h"
+#include "boardparam.h"
 
+// board is a wapper for boardparam
 class Board
 {
 public:
-    Board() = default;
-
     void setMatrix(const ElementsMatrix &m);
 
     bool move(Direction &d);
+
     bool is_done() const;
 
     ElementsMatrix to_matrix() const;
 
 private:
-    ElementsMatrix matrix;
-    Pos man_pos;
-    PosVector des_vec;
+    BoardParam param;
 };
 
 #endif // BOARD_H

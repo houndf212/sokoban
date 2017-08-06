@@ -32,7 +32,8 @@ SOURCES += main.cpp \
     test_console_board.cpp \
     xsb.cpp \
     imagesource.cpp \
-    boardwidget.cpp
+    boardwidget.cpp \
+    boardparam.cpp
 
 HEADERS  += \
     elements.h \
@@ -45,7 +46,8 @@ HEADERS  += \
     board_api.h \
     xsb.h \
     imagesource.h \
-    boardwidget.h
+    boardwidget.h \
+    boardparam.h
 
 RESOURCES += \
     image.qrc
