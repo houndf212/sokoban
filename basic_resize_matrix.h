@@ -1,6 +1,7 @@
 ﻿#ifndef BASIC_RESIZE_MATRIX_H
 #define BASIC_RESIZE_MATRIX_H
 #include <vector>
+#include <limits>
 #include <assert.h>
 #include "basic_pos.h"
 
@@ -12,6 +13,7 @@ public:
     typedef S size_type;
 
     static constexpr size_type zero() { return S(0); }
+    static constexpr value_type max() { return std::numeric_limits<value_type>::max(); }
 
     void resize(size_type row, size_type col)
     {
@@ -52,14 +54,14 @@ public:
     size_type row_size() const { return n_row; }
     size_type col_size() const { return n_col; }
 
-    bool equal(const Basic_Resize_Matrix& bm)
+    bool equal(const Basic_Resize_Matrix& bm) const
     {
         assert(row_size() == bm.row_size());
         assert(col_size() == bm.col_size());
         return m == bm.m;
     }
 
-    bool less(const Basic_Resize_Matrix& bm)
+    bool less(const Basic_Resize_Matrix& bm) const
     {
         assert(row_size() == bm.row_size());
         assert(col_size() == bm.col_size());
@@ -72,10 +74,10 @@ private:
     std::vector<std::vector<value_type>> m;
 };
 
-//template<typename T, typename S>
-//bool operator == (const Basic_Resize_Matrix<T, S> &a, const Basic_Resize_Matrix<T, S> &a)
-//{
-//    return a.equal(b);
-//}
+template<typename T, typename S>
+inline bool operator == (const Basic_Resize_Matrix<T, S> &a, const Basic_Resize_Matrix<T, S> &b)
+{
+    return a.equal(b);
+}
 
 #endif // BASIC_RESIZE_MATRIX_H

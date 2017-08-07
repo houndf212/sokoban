@@ -13,6 +13,16 @@ void print(const Pos &p)
 }
 
 template<>
+void print(const PosVector &vec)
+{
+    cout<<"[";
+    for (auto p : vec) {
+        cout<<"("<<p.row()<<","<<p.col()<<"),";
+    }
+    cout<<"]"<<endl;
+}
+
+template<>
 void print(const IntMatrix &m)
 {
     for (auto row=m.zero(); row<m.row_size(); ++row) {

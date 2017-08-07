@@ -1,4 +1,4 @@
-#include "boxmover.h"
+﻿#include "boxmover.h"
 #include "xsb.h"
 #include "board_api.h"
 #include "debug_print.h"
@@ -22,20 +22,20 @@ void test_boxmover()
         print(p);
     }
     BoardParam param1 = lst.front();
-    auto lst1 = BoxMover::next_move(param1);
-    for (const auto &p : lst1) {
+    auto list1 = BoxMover::next_move(param1);
+    for (const auto &p : list1) {
         print(p);
     }
 
-    BoardParam param2 = lst1.front();
-    auto lst2 = BoxMover::next_move(param2);
-    for (const auto &p : lst2) {
+    BoardParam param2 = list1.front();
+    auto list2 = BoxMover::next_move(param2);
+    for (const auto &p : list2) {
         print(p);
     }
 
-    BoardParam param3 = lst2.front();
-    auto lst3 = BoxMover::next_move(param3);
-    for (const auto &p : lst3) {
+    BoardParam param3 = list2.front();
+    auto list3 = BoxMover::next_move(param3);
+    for (const auto &p : list3) {
         print(p);
     }
 }

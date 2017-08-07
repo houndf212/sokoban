@@ -1,4 +1,4 @@
-#include "boardwidget.h"
+﻿#include "boardwidget.h"
 #include <QPainter>
 #include <QKeyEvent>
 

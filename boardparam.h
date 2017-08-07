@@ -1,4 +1,4 @@
-#ifndef BOARDPARAM_H
+﻿#ifndef BOARDPARAM_H
 #define BOARDPARAM_H
 #include "types.h"
 
@@ -7,9 +7,13 @@
 class BoardParam
 {
 public:
+    BoardParam &operator=(const BoardParam &param);
+
     void set_matrix(const ElementsMatrix &m);
 
     bool is_goal(Pos p) const;
+
+    BoardParam to_goal() const;
 
     //人所在的位置
     Pos man_pos;
