@@ -4,7 +4,7 @@
 
 size_t BoardGraph::BoardHash::operator()(const BoardParam &param) const
 {
-    const ElementsMatrix &m = param.room;
+    const ElementsMatrix &m = param.room();
     std::string str;
     str.reserve(m.row_size()*m.col_size());
 
@@ -35,13 +35,13 @@ BoardGraph::distance_t BoardGraph::heuristic(const BoardGraph::vertex_t &v1, con
     //这个函数需要调整，当goal的数值过大的时候，这里的计算成为了瓶颈
     assert(v2.is_done());
     IntMatrix m;
-    const auto size = v1.goals.size();
+    const auto size = v1.goals_size();
     m.resize(size, size);
 
     for (auto i=m.zero(); i<m.row_size(); ++i) {
         for (auto j=m.zero(); j<m.col_size(); ++j) {
-            Pos box = v1.box_index[i];
-            Pos goal = v1.goals[j];
+            Pos box = v1.boxes().at(i);
+            Pos goal = v1.goals().at(j);
             distance_t d = Manhattan_Distance(box, goal);
             m.set(Pos(i, j), d);
         }
