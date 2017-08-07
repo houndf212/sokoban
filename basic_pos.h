@@ -45,6 +45,24 @@ public:
         }
         return to;
     }
+    Direction to(Basic_Pos p) const
+    {
+        auto drow = p.row() - row();
+        auto dcol = p.col() - col();
+        if (drow == 0) {
+            if (dcol == 1)
+                return Direction::right;
+            else if (dcol == -1)
+                return Direction::left;
+        }
+        else if (dcol == 0) {
+            if (drow == 1)
+                return Direction::down;
+            else if (drow == -1)
+                return Direction::up;
+        }
+        return Direction::NotValid;
+    }
 private:
     T m_row;
     T m_col;

@@ -88,6 +88,7 @@ bool BoardParam::man_move(Direction &d)
 
 void BoardParam::box_move(Pos box, Pos to)
 {
+    assert(box.to(to) != Direction::NotValid);
     assert(room.get(box) == Elements::box);
     assert(room.get(to) == Elements::floor);
     assert(box == Pos((man_pos.row()+to.row())/2, (man_pos.col()+to.col())/2));
