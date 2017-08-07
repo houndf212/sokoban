@@ -2,7 +2,6 @@
 #include "types.h"
 #include "xsb.h"
 #include "boardparam.h"
-#include "board_api.h"
 #include <iostream>
 using namespace std;
 
@@ -52,5 +51,5 @@ void print(const ElementsMatrix &m)
 template<>
 void print(const BoardParam &p)
 {
-    print(Board_API::to_matrix(p));
+    print(p.to_matrix());
 }

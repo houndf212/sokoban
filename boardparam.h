@@ -11,7 +11,22 @@ public:
 
     void set_matrix(const ElementsMatrix &m);
 
+    bool man_move(Direction &d);
+
+    std::list<BoardParam> next_move() const;
+private:
+    void box_move(Pos box, Pos to);
+    bool can_box_move(Pos box, Direction d) const;
+public:
+    bool is_done() const;
+
     bool is_goal(Pos p) const;
+
+    bool is_absolutely_dead_box(Pos box) const;
+
+    bool is_absolutely_dead() const;
+
+    ElementsMatrix to_matrix() const;
 
     BoardParam to_goal() const;
 
@@ -24,5 +39,7 @@ public:
     // box 的索引
     PosVector box_index;
 };
+
+bool operator == (const BoardParam &p1, const BoardParam &p2);
 
 #endif // BOARDPARAM_H

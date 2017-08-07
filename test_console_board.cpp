@@ -1,4 +1,4 @@
-﻿#include "board.h"
+﻿#include "boardparam.h"
 #include "debug_print.h"
 #include "xsb.h"
 #include <iostream>
@@ -10,8 +10,8 @@ void test_console_board()
 
     print(m);
 
-    Board board;
-    board.setMatrix(m);
+    BoardParam board;
+    board.set_matrix(m);
     while (!board.is_done()) {
         char c;
         cin>>c;
@@ -32,7 +32,7 @@ void test_console_board()
         default:
             break;
         }
-        if (d!=Direction::NotValid && board.move(d)) {
+        if (d!=Direction::NotValid && board.man_move(d)) {
             cout << "move: "<<XSB::d_to_char(d)<<endl;
         }
         print(board.to_matrix());

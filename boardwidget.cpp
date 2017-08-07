@@ -11,7 +11,7 @@ BoardWidget::BoardWidget(QWidget *parent)
 
 void BoardWidget::setMatrix(const ElementsMatrix &m)
 {
-    board.setMatrix(m);
+    board.set_matrix(m);
     buffer_pix = QPixmap(m.col_size()*k_width, m.row_size()*k_height);
     resize(buffer_pix.size());
     createPixBuffer();
@@ -47,7 +47,7 @@ void BoardWidget::keyPressEvent(QKeyEvent *event)
         return;
         break;
     }
-    bool b = board.move(d);
+    bool b = board.man_move(d);
     if (b) {
         createPixBuffer();
     }

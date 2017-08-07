@@ -1,7 +1,7 @@
 #ifndef BOARDWIDGET_H
 #define BOARDWIDGET_H
 #include <QWidget>
-#include "board.h"
+#include "boardparam.h"
 #include "imagesource.h"
 
 class BoardWidget : public QWidget
@@ -21,7 +21,7 @@ private:
     const int k_width;
     const int k_height;
 
-    Board board;
+    BoardParam board;
     QPixmap buffer_pix;
 };
 

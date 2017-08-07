@@ -27,8 +27,6 @@ PRECOMPILED_HEADER = pch.h
 
 SOURCES += main.cpp \
     debug_print.cpp \
-    board.cpp \
-    board_api.cpp \
     test_print.cpp \
     test_console_board.cpp \
     xsb.cpp \
@@ -36,7 +34,6 @@ SOURCES += main.cpp \
     boardwidget.cpp \
     boardparam.cpp \
     roomslice.cpp \
-    boxmover.cpp \
     movelist.cpp \
     test_boxmover.cpp \
     assignmentproblem.cpp \
@@ -51,14 +48,11 @@ HEADERS  += \
     types.h \
     debug_print.h \
     movedirection.h \
-    board.h \
-    board_api.h \
     xsb.h \
     imagesource.h \
     boardwidget.h \
     boardparam.h \
     roomslice.h \
-    boxmover.h \
     movelist.h \
     assignmentproblem.h \
     dijkstra.h \

@@ -1,6 +1,7 @@
 ﻿#ifndef BASIC_POS_H
 #define BASIC_POS_H
 #include <cstdlib>
+#include "movedirection.h"
 
 template <typename T>
 class Basic_Pos
@@ -20,6 +21,29 @@ public:
     bool equal(const Basic_Pos& p) const
     {
         return row() == p.row() && col() == p.col();
+    }
+
+    Basic_Pos move(Direction d) const
+    {
+        Basic_Pos to = *this;
+        switch (d) {
+        case Direction::up:
+            to.row()--;
+            break;
+        case Direction::down:
+            to.row()++;
+            break;
+        case Direction::left:
+            to.col()--;
+            break;
+        case Direction::right:
+            to.col()++;
+            break;
+        default:
+            assert(false);
+            break;
+        }
+        return to;
     }
 private:
     T m_row;
