@@ -2,6 +2,7 @@
 #include "dijkstra.h"
 #include "xsb.h"
 #include "debug_print.h"
+#include <QtCore>
 
 void test_baordgraph()
 {
@@ -16,8 +17,23 @@ void test_baordgraph()
     typedef BoardGraph BG;
     typedef Dijkstra<BG> G;
     BG graph;
-    auto path = G::AStart_path(graph, start, goal);
-    for (const auto &p : path.first) {
-        print(p);
+
+    {
+        QElapsedTimer timer;
+        timer.start();
+        auto path = G::shortest_path(graph, start, goal);
+        assert(!path.first.empty());
+        qDebug() << timer.elapsed();
+        qDebug()<< "move size: "<<path.second;
+    }
+
+
+    {
+        QElapsedTimer timer;
+        timer.start();
+        auto path = G::AStart_path(graph, start, goal);
+        assert(!path.first.empty());
+        qDebug() << timer.elapsed();
+        qDebug()<< "move size: "<<path.second;
     }
 }

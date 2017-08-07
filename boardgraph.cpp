@@ -3,7 +3,6 @@
 #include "boxmover.h"
 #include "board_api.h"
 #include "assignmentproblem.h"
-#include "debug_print.h"
 
 size_t BoardGraph::BoardHash::operator()(const BoardParam &param) const
 {
@@ -35,7 +34,7 @@ BoardGraph::distance_t BoardGraph::distance(const BoardGraph::vertex_t &v1, cons
 
 BoardGraph::distance_t BoardGraph::heuristic(const BoardGraph::vertex_t &v1, const BoardGraph::vertex_t &v2)
 {
-    print(v1);
+    //这个函数需要调整，当goal的数值过大的时候，这里的计算成为了瓶颈
     assert(Board_API::is_done(v2));
     IntMatrix m;
     const auto size = v1.goals.size();

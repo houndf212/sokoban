@@ -1,6 +1,7 @@
 ﻿#ifndef BOARDGRAPH_H
 #define BOARDGRAPH_H
 #include "boardparam.h"
+#include "board_api.h"
 
 class BoardGraph
 {
@@ -25,11 +26,12 @@ public:
 inline bool operator == (const BoardParam &p1, const BoardParam &p2)
 {
     assert(p1.goals == p2.goals);
-    bool b = p1.man_pos == p2.man_pos && p1.room == p2.room;
-    if (b) {
-        assert(RoomSlice(p1).can_man_to(p2.man_pos));
-    }
-    return b;
+
+    // 这里需要特殊处理完成的状态，因为完成时人在哪里也不知道，所以特殊处理
+    if (Board_API::is_done(p1) && Board_API::is_done(p2))
+        return true;
+
+    return p1.room == p2.room && RoomSlice(p1).can_man_to(p2.man_pos);
 }
 
 
