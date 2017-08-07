@@ -31,6 +31,16 @@ void BoardParam::set_matrix(const ElementsMatrix &m)
                 vec.push_back(p);
                 room.set(p, Elements::floor);
                 break;
+            case Elements::man_goal:
+                man_pos = p;
+                vec.push_back(p);
+                room.set(p, Elements::floor);
+                break;
+            case Elements::box_goal:
+                box_index.push_back(p);
+                vec.push_back(p);
+                room.set(p, Elements::box);
+                break;
             default:
                 break;
             }
