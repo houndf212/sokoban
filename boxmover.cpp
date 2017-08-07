@@ -61,7 +61,7 @@ std::list<BoardParam> BoxMover::next_move(const BoardParam &param)
             //如果需要计算移动步骤，这里人是跳跃移动的
             pa.man_pos = man_to;
             Board_API::box_move(pa, box, to);
-            if (!BoxMover::is_absolutely_dead_box(to ,pa))
+            if (pa.is_goal(to) || !BoxMover::is_absolutely_dead_box(to ,pa))
                 nexts.push_back(pa);
         }
     };
