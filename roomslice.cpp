@@ -1,4 +1,4 @@
-#include "roomslice.h"
+﻿#include "roomslice.h"
 #include "debug_print.h"
 
 RoomSlice::RoomSlice(const BoardParam &pa)
@@ -31,6 +31,7 @@ RoomSlice::RoomSlice(const BoardParam &pa)
 
 bool RoomSlice::can_man_to(Pos p) const
 {
+    assert(slice.isInMatrix(p));
     return slice.get(p) == slice.get(param.man());
 }
 

@@ -28,15 +28,19 @@ public:
         Basic_Pos to = *this;
         switch (d) {
         case Direction::up:
+        case Direction::push_up:
             to.row()--;
             break;
         case Direction::down:
+        case Direction::push_down:
             to.row()++;
             break;
         case Direction::left:
+        case Direction::push_left:
             to.col()--;
             break;
         case Direction::right:
+        case Direction::push_right:
             to.col()++;
             break;
         default:

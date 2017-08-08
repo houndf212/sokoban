@@ -30,6 +30,10 @@ BoardGraph::distance_t BoardGraph::distance(const BoardGraph::vertex_t &v1, cons
     return distance_t(1);
 }
 
+static BoardGraph::distance_t fast_heuristic(const PosVector &v1, const PosVector &v2)
+{
+
+}
 BoardGraph::distance_t BoardGraph::heuristic(const BoardGraph::vertex_t &v1, const BoardGraph::vertex_t &v2)
 {
     //这个函数需要调整，当goal的数值过大的时候，这里的计算成为了瓶颈
@@ -38,12 +42,13 @@ BoardGraph::distance_t BoardGraph::heuristic(const BoardGraph::vertex_t &v1, con
     const auto size = v1.goals_size();
     m.resize(size, size);
 
-    for (auto i=m.zero(); i<m.row_size(); ++i) {
-        for (auto j=m.zero(); j<m.col_size(); ++j) {
-            Pos box = v1.boxes().at(i);
-            Pos goal = v1.goals().at(j);
+    int index = 0;
+    for (auto box : v1.boxes()) {
+        for (auto goal : v1.goals()) {
             distance_t d = Manhattan_Distance(box, goal);
-            m.set(Pos(i, j), d);
+            Pos p(index/m.col_size(), index%m.col_size());
+            m.set(p, d);
+            index++;
         }
     }
 

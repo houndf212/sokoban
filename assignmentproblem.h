@@ -20,6 +20,7 @@ enumeration_method(const IntMatrix &m)
         weight_t w = 0;
         for (auto row=m.zero(); row<m.row_size(); ++row) {
             Pos p(row, vec[row]);
+            assert(m.isInMatrix(p));
             w += m.get(p);
         }
         return w;
