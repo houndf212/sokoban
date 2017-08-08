@@ -264,20 +264,17 @@ static ElementsMatrix remove_col(type_size col, const ElementsMatrix &m)
 
 ElementsMatrix XSB::remove_outer_wall(ElementsMatrix m)
 {
-//    print(m);
     for (auto row=m.zero(); row<m.row_size()-1;) {
         if (is_wall_row(row, m) && is_wall_row(row+1, m)) {
             m = remove_row(row, m);
-            print(m);
         }
         else
             row++;
     }
-//    print(m);
+
     for (auto col=m.zero(); col<m.col_size()-1;) {
         if (is_wall_col(col, m) && is_wall_col(col+1, m)) {
             m = remove_col(col, m);
-            print(m);
         }
         else
             col++;

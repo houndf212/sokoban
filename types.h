@@ -13,6 +13,8 @@ typedef int type_value;
 typedef int type_size;
 
 typedef Basic_Pos<type_size> Pos;
+
+typedef Basic_Resize_Matrix<bool, type_size> BoolMatrix;
 typedef Basic_Resize_Matrix<type_value, type_size> IntMatrix;
 typedef Basic_Resize_Matrix<Elements, type_size> ElementsMatrix;
 
