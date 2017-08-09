@@ -35,7 +35,7 @@ bool RoomSlice::can_man_to(Pos p) const
     return slice.get(p) == slice.get(param.man());
 }
 
-void RoomSlice::seedPos(Pos p, int val)
+void RoomSlice::seedPos(Pos p, IntMatrix::value_type val)
 {
     if (slice.isInMatrix(p)
             && slice.get(p)==k_unflagged

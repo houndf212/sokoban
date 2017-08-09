@@ -9,8 +9,8 @@ size_t BoardGraph::BoardHash::operator()(const BoardParam &param) const
     std::string str;
     str.reserve(m.row_size()*m.col_size());
 
-    for (int row=0; row<m.row_size(); ++row) {
-        for (int col=0; col<m.col_size(); ++col) {
+    for (auto row=m.zero(); row<m.row_size(); ++row) {
+        for (auto col=m.zero(); col<m.col_size(); ++col) {
             Pos p(row, col);
             auto v = m.get(p);
             str.push_back(static_cast<char>(v));
@@ -45,7 +45,7 @@ BoardGraph::distance_t BoardGraph::heuristic(const BoardGraph::vertex_t &v1, con
         IntMatrix m;
         m.resize(size, size);
 
-        int index = 0;
+        auto index = m.zero();
         for (auto box : v1.boxes()) {
             for (auto goal : v1.goals()) {
                 distance_t d = Manhattan_Distance(box, goal);

@@ -63,19 +63,19 @@ ElementsMatrix XSB::from_file(const char *filestr)
     if (lst.isEmpty())
         return em;
 
-    int col_size = 0;
-    for (int i=0; i<lst.size(); ++i) {
+    type_size col_size = 0;
+    for (type_size i=0; i<lst.size(); ++i) {
         lst[i] = lst[i].trimmed();
         col_size = qMax(col_size, lst.at(i).size());
     }
-    int row_size = lst.size();
+    type_size row_size = lst.size();
 
     em.resize(row_size, col_size);
     em.fill(Elements::floor);
 
-    for (int row=0; row<row_size; ++row) {
+    for (type_size row=0; row<row_size; ++row) {
         const auto &line = lst.at(row);
-        for (int col=0; col<line.size(); ++col) {
+        for (type_size col=0; col<line.size(); ++col) {
             Pos p(row, col);
             char c = line.at(col);
             auto e = XSB::char_to_e(c);

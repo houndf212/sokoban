@@ -1,4 +1,4 @@
-#ifndef ROOMSLICE_H
+﻿#ifndef ROOMSLICE_H
 #define ROOMSLICE_H
 #include "boardparam.h"
 
@@ -11,7 +11,7 @@ private:
     static constexpr IntMatrix::value_type k_block = 0;
     static constexpr IntMatrix::value_type k_unflagged = -1;
 
-    void seedPos(Pos p, int val);
+    void seedPos(Pos p, IntMatrix::value_type val);
 private:
     const BoardParam &param;
     IntMatrix slice;
