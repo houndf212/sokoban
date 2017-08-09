@@ -134,14 +134,14 @@ MoveList BoardGraph::trans_to(const BoardGraph::VertexList &ves)
 MoveList BoardGraph::to_movelist(const BoardGraph::vertex_t &v1, const BoardGraph::vertex_t &v2)
 {
     //先找到box 移动的位置
-    Pos box1;
+    Pos box1(-1, -1);
     for (auto p : v1.boxes()) {
         if (v2.room().get(p) != Elements::box) {
             box1 = p;
             break;
         }
     }
-    Pos box2;
+    Pos box2(-1, -1);
     for (auto p : v2.boxes()) {
         if (v1.room().get(p) != Elements::box) {
             box2 = p;
@@ -169,10 +169,9 @@ MoveList BoardGraph::to_movelist(const BoardGraph::vertex_t &v1, const BoardGrap
     }
 
     mlst.check_push(add_push(push));
-    man_from = box2;
+    man_from = box1;
 
     if (man_from != v2.man()) {
-
         typedef Dijkstra<MatrixGraph> G;
         MatrixGraph g(v2.room());
 
@@ -184,11 +183,6 @@ MoveList BoardGraph::to_movelist(const BoardGraph::vertex_t &v1, const BoardGrap
         }
     }
     assert(man_from == v2.man());
-
-//    print(v1);
-//    print(v2);
-//    print(mlst);
-
     return mlst;
 }
 

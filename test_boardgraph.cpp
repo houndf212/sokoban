@@ -32,7 +32,7 @@ void test_baordgraph()
         timer.start();
         auto path = G::AStart_path(graph, start, goal);
         assert(!path.first.empty());
-        qDebug() << timer.elapsed();
+        qDebug() << "cost time: " << timer.elapsed();
         auto vecs = path.first;
         vecs.push_front(start);
 //        for (const auto &m : vecs) {

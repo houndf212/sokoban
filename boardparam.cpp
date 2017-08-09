@@ -137,6 +137,19 @@ bool BoardParam::can_box_move(Pos box, Direction d) const
     return s.can_man_to(man_to);
 }
 
+bool BoardParam::precise_equal(const BoardParam &param) const
+{
+    assert(goals() == param.goals());
+    return man() == param.man()
+            && room() == param.room();
+}
+
+bool BoardParam::like_equal(const BoardParam &param) const
+{
+    assert(goals() == param.goals());
+    return room() == param.room() && RoomSlice(*this).can_man_to(param.man());
+}
+
 bool BoardParam::is_done() const
 {
     for (auto p : m_goals) {

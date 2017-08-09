@@ -38,6 +38,9 @@ public:
 private:
     void box_move(Pos box, Pos to);
     bool can_box_move(Pos box, Direction d) const;
+public:
+    bool precise_equal(const BoardParam &param) const;
+    bool like_equal(const BoardParam &param) const;
 private:
     //人所在的位置
     Pos man_pos;
