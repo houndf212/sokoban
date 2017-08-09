@@ -1,5 +1,4 @@
 ﻿#include "types.h"
-#include "debug_print.h"
 
 void test_print()
 {

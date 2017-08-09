@@ -1,6 +1,7 @@
 ﻿#ifndef BOARDPARAM_H
 #define BOARDPARAM_H
 #include "types.h"
+#include "movelist.h"
 
 //这个类描述一个推箱子所有需要的元素，在boardapi操作这个类
 
@@ -32,6 +33,8 @@ public:
     ElementsMatrix to_matrix() const;
 
     BoardParam to_goal() const;
+
+    bool can_solve(const MoveList &mlst) const;
 private:
     void box_move(Pos box, Pos to);
     bool can_box_move(Pos box, Direction d) const;

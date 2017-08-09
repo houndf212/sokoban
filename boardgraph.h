@@ -1,6 +1,7 @@
 ﻿#ifndef BOARDGRAPH_H
 #define BOARDGRAPH_H
 #include "boardparam.h"
+#include "movelist.h"
 
 class BoardGraph
 {
@@ -19,8 +20,12 @@ public:
     static VertexList neighbors(const vertex_t& param);
     static distance_t distance(const vertex_t &v1, const vertex_t &v2);
     static distance_t heuristic(const vertex_t &v1, const vertex_t &v2);
+
+    static MoveList trans_to(const VertexList &ves);
 private:
     static distance_t greedy_search(const IntMatrix &m);
+private:
+    static MoveList to_movelist(const vertex_t &v1, const vertex_t &v2);
 };
 
 #endif // BOARDGRAPH_H

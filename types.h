@@ -3,14 +3,15 @@
 
 #include <vector>
 #include <list>
+#include <set>
 
 #include "basic_pos.h"
 #include "basic_resize_matrix.h"
 #include "elements.h"
 #include "movedirection.h"
 
-typedef int type_value;
-typedef int type_size;
+typedef short type_value;
+typedef short type_size;
 
 typedef Basic_Pos<type_size> Pos;
 

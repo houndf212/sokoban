@@ -2,6 +2,7 @@
 #include "types.h"
 #include "xsb.h"
 #include "boardparam.h"
+#include "movelist.h"
 #include <iostream>
 using namespace std;
 
@@ -9,6 +10,16 @@ template<>
 void print(const Pos &p)
 {
     cout<<"("<<p.row()<<","<<p.col()<<")"<<endl;
+}
+
+template<>
+void print(const PosList &vec)
+{
+    cout<<"[";
+    for (auto p : vec) {
+        cout<<"("<<p.row()<<","<<p.col()<<"),";
+    }
+    cout<<"]"<<endl;
 }
 
 template<>
@@ -52,4 +63,14 @@ template<>
 void print(const BoardParam &p)
 {
     print(p.to_matrix());
+}
+
+template<>
+void print(const MoveList &mlst)
+{
+    cout<<"[";
+    for (auto d : mlst) {
+        cout<<XSB::d_to_char(d)<<",";
+    }
+    cout<<"]"<<endl;
 }

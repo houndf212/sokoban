@@ -34,8 +34,8 @@ inline bool is_reverse(Direction d1, Direction d2)
 
     static_assert((toInt<Direction::down>()&toInt<Direction::right>()) != 0, "");
     static_assert((toInt<Direction::down>()&toInt<Direction::left>()) != 0, "");
-
-    return (Direction_t(d1)&Direction_t(d2)) == 0;
+    extern bool is_push(Direction);
+    return !is_push(d1) && !is_push(d2) && (Direction_t(d1)&Direction_t(d2)) == 0;
 }
 
 inline Direction reverse(Direction d)

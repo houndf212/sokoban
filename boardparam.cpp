@@ -207,6 +207,17 @@ BoardParam BoardParam::to_goal() const
     return pa;
 }
 
+bool BoardParam::can_solve(const MoveList &mlst) const
+{
+    BoardParam param = *this;
+
+    for (auto d : mlst) {
+        if (!param.man_move(d))
+            return false;
+    }
+    return param.is_done();
+}
+
 bool operator ==(const BoardParam &p1, const BoardParam &p2)
 {
     assert(p1.goals() == p2.goals());

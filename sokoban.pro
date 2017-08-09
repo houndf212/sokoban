@@ -18,7 +18,7 @@ CONFIG += console
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-QMAKE_CXXFLAGS_RELEASE += -DNDEBUG
+#QMAKE_CXXFLAGS_RELEASE += -DNDEBUG
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -41,7 +41,9 @@ SOURCES += main.cpp \
     assignmentproblem.cpp \
     test_assignmentproblem.cpp \
     boardgraph.cpp \
-    test_boardgraph.cpp
+    test_boardgraph.cpp \
+    matrixgraph.cpp \
+    test_matrixgraph.cpp
 
 HEADERS  += \
     elements.h \
@@ -59,7 +61,9 @@ HEADERS  += \
     assignmentproblem.h \
     dijkstra.h \
     boardgraph.h \
-    pch.h
+    pch.h \
+    maskmatrix.h \
+    matrixgraph.h
 
 RESOURCES += \
     image.qrc

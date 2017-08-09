@@ -1,5 +1,4 @@
 ﻿#include "roomslice.h"
-#include "debug_print.h"
 
 RoomSlice::RoomSlice(const BoardParam &pa)
     :param(pa)

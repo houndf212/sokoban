@@ -1,5 +1,4 @@
 ﻿#include "boardparam.h"
-#include "debug_print.h"
 #include "xsb.h"
 #include <iostream>
 using namespace std;

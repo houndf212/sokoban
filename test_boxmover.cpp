@@ -1,7 +1,5 @@
 ﻿#include "boardparam.h"
 #include "xsb.h"
-#include "debug_print.h"
-#include <QDebug>
 
 void test_boxmover()
 {

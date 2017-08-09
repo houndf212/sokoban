@@ -1,7 +1,6 @@
 ﻿#include <QApplication>
 #include "boardwidget.h"
 #include "xsb.h"
-#include "debug_print.h"
 #include "boardparam.h"
 
 void test()
@@ -11,6 +10,7 @@ void test()
     extern void test_boxmover();
     extern void test_assignmentproblem();
     extern void test_baordgraph();
+    extern void test_matrixgraph();
     test_baordgraph();
 }
 

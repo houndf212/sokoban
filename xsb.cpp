@@ -66,7 +66,7 @@ ElementsMatrix XSB::from_file(const char *filestr)
     auto col_size = em.szero();
     for (auto i=em.szero(); i<lst.size(); ++i) {
         lst[i] = lst[i].trimmed();
-        col_size = qMax(col_size, lst.at(i).size());
+        col_size = std::max(col_size, type_size(lst.at(i).size()));
     }
     type_size row_size = lst.size();
 

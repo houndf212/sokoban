@@ -2,6 +2,9 @@
 #include <string>
 #include <queue>
 #include "assignmentproblem.h"
+#include "maskmatrix.h"
+#include "matrixgraph.h"
+#include "dijkstra.h"
 
 size_t BoardGraph::BoardHash::operator()(const BoardParam &param) const
 {
@@ -69,18 +72,14 @@ BoardGraph::distance_t BoardGraph::greedy_search(const IntMatrix &m)
 {
     assert(m.row_size() == m.col_size());
     const auto size = m.row_size();
-    BoolMatrix mask;
+    MaskMatrix mask;
     mask.resize(size, size);
-    mask.fill(false);
-
-    auto is_mask = [&mask](Pos p) {
-      return mask.get(p) == true;
-    };
+    mask.unmask_all();
 
     auto mask_p = [&mask](Pos p) {
         for(auto i=mask.szero(); i<mask.row_size(); ++i) {
-            mask.set(Pos(i, p.col()), true);
-            mask.set(Pos(p.row(), i), true);
+            mask.mask(Pos(i, p.col()));
+            mask.mask(Pos(p.row(), i));
         }
     };
 
@@ -104,7 +103,7 @@ BoardGraph::distance_t BoardGraph::greedy_search(const IntMatrix &m)
         Pos min = pq.back();
         pq.pop_back();
 
-        if (is_mask(min))
+        if (mask.is_mask(min))
             continue;
         else {
             weight += m.get(min);
@@ -113,5 +112,83 @@ BoardGraph::distance_t BoardGraph::greedy_search(const IntMatrix &m)
         }
     }
     return weight;
+}
+
+MoveList BoardGraph::trans_to(const BoardGraph::VertexList &ves)
+{
+    auto first = begin(ves);
+    auto second = first;
+    ++second;
+
+    MoveList mlst;
+    while(second != end(ves)) {
+        auto m = to_movelist(*first, *second);
+        mlst.check_append(m);
+        ++first;
+        ++second;
+    }
+    return mlst;
+}
+
+//计算两个 box move 之间的插值 v1 --> v2
+MoveList BoardGraph::to_movelist(const BoardGraph::vertex_t &v1, const BoardGraph::vertex_t &v2)
+{
+    //先找到box 移动的位置
+    Pos box1;
+    for (auto p : v1.boxes()) {
+        if (v2.room().get(p) != Elements::box) {
+            box1 = p;
+            break;
+        }
+    }
+    Pos box2;
+    for (auto p : v2.boxes()) {
+        if (v1.room().get(p) != Elements::box) {
+            box2 = p;
+            break;
+        }
+    }
+    assert(box1 != box2);
+    Direction push = box1.to(box2);
+    assert(push!=Direction::NotValid);
+    Pos man_from = v1.man();
+    Pos man_to = box1.move(reverse(push));
+
+    MoveList mlst;
+    if (man_from != man_to) {
+
+        typedef Dijkstra<MatrixGraph> G;
+        MatrixGraph g(v1.room());
+
+        auto path = G::AStart_path(g, man_from, man_to);
+        for (auto p : path.first) {
+            auto d = man_from.to(p);
+            mlst.check_push(d);
+            man_from = p;
+        }
+    }
+
+    mlst.check_push(add_push(push));
+    man_from = box2;
+
+    if (man_from != v2.man()) {
+
+        typedef Dijkstra<MatrixGraph> G;
+        MatrixGraph g(v2.room());
+
+        auto path = G::AStart_path(g, man_from, v2.man());
+        for (auto p : path.first) {
+            auto d = man_from.to(p);
+            mlst.check_push(d);
+            man_from = p;
+        }
+    }
+    assert(man_from == v2.man());
+
+//    print(v1);
+//    print(v2);
+//    print(mlst);
+
+    return mlst;
 }
 
