@@ -6,8 +6,8 @@ void BoardParam::set_matrix(const ElementsMatrix &m)
 {
     m_room = m;
 
-    for (auto row=m.zero(); row<m.row_size(); ++row) {
-        for (auto col=m.zero(); col<m.col_size(); ++col) {
+    for (auto row=m.szero(); row<m.row_size(); ++row) {
+        for (auto col=m.szero(); col<m.col_size(); ++col) {
             Pos p(row, col);
             auto e = m.get(p);
             switch (e) {

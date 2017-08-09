@@ -12,8 +12,8 @@ public:
     typedef T value_type;
     typedef S size_type;
 
-    static constexpr size_type zero() { return S(0); }
-    static constexpr value_type max() { return std::numeric_limits<value_type>::max(); }
+    static constexpr size_type szero() { return S(0); }
+    static constexpr value_type vmax() { return std::numeric_limits<value_type>::max(); }
 
     void resize(size_type row, size_type col)
     {

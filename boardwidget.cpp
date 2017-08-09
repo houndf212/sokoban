@@ -58,8 +58,8 @@ void BoardWidget::createPixBuffer()
     auto matrix = board.to_matrix();
 
     QPainter painter(&buffer_pix);
-    for (auto row=matrix.zero(); row<matrix.row_size(); ++row) {
-        for (auto col=matrix.zero(); col<matrix.col_size(); ++col) {
+    for (auto row=matrix.szero(); row<matrix.row_size(); ++row) {
+        for (auto col=matrix.szero(); col<matrix.col_size(); ++col) {
             Pos p(row, col);
             QPixmap pix = image.get_image(matrix.get(p));
             painter.drawPixmap(k_width*col,

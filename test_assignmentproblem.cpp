@@ -16,8 +16,8 @@ IntMatrix get_m()
     };
 
     int index = 0;
-    for (auto row=m.zero(); row<m.row_size(); ++row) {
-        for (auto col=m.zero(); col<m.col_size(); ++col) {
+    for (auto row=m.szero(); row<m.row_size(); ++row) {
+        for (auto col=m.szero(); col<m.col_size(); ++col) {
             Pos p(row, col);
             m.set(p, arr[index]);
             index++;

@@ -14,11 +14,11 @@ enumeration_method(const IntMatrix &m)
     typedef std::vector<IntMatrix::size_type> ColVec;
     ColVec arr;
     arr.resize(m.row_size());
-    std::iota(begin(arr), end(arr), m.zero());
+    std::iota(begin(arr), end(arr), m.szero());
 
     auto func = [](const IntMatrix &m, const ColVec &vec) {
         weight_t w = 0;
-        for (auto row=m.zero(); row<m.row_size(); ++row) {
+        for (auto row=m.szero(); row<m.row_size(); ++row) {
             Pos p(row, vec[row]);
             assert(m.isInMatrix(p));
             w += m.get(p);
@@ -38,7 +38,7 @@ enumeration_method(const IntMatrix &m)
 
     PosVector min_vec;
     min_vec.resize(min_col.size());
-    for (auto row=m.zero(); row<m.row_size(); ++row) {
+    for (auto row=m.szero(); row<m.row_size(); ++row) {
         min_vec[row] = Pos(row, min_col[row]);
     }
     return std::make_pair(min_vec, min);

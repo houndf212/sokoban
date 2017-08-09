@@ -24,8 +24,8 @@ void print(const PosVector &vec)
 template<>
 void print(const IntMatrix &m)
 {
-    for (auto row=m.zero(); row<m.row_size(); ++row) {
-        for (auto col=m.zero(); col<m.col_size(); ++col) {
+    for (auto row=m.szero(); row<m.row_size(); ++row) {
+        for (auto col=m.szero(); col<m.col_size(); ++col) {
             cout<<m.get(Pos(row, col));
             cout<<" ";
         }
@@ -37,8 +37,8 @@ void print(const IntMatrix &m)
 template<>
 void print(const ElementsMatrix &m)
 {
-    for (auto row=m.zero(); row<m.row_size(); ++row) {
-        for (auto col=m.zero(); col<m.col_size(); ++col) {
+    for (auto row=m.szero(); row<m.row_size(); ++row) {
+        for (auto col=m.szero(); col<m.col_size(); ++col) {
             auto e = m.get(Pos(row, col));
             cout<<XSB::e_to_char(e);
             cout<<" ";

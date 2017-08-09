@@ -9,8 +9,8 @@ size_t BoardGraph::BoardHash::operator()(const BoardParam &param) const
     std::string str;
     str.reserve(m.row_size()*m.col_size());
 
-    for (auto row=m.zero(); row<m.row_size(); ++row) {
-        for (auto col=m.zero(); col<m.col_size(); ++col) {
+    for (auto row=m.szero(); row<m.row_size(); ++row) {
+        for (auto col=m.szero(); col<m.col_size(); ++col) {
             Pos p(row, col);
             auto v = m.get(p);
             str.push_back(static_cast<char>(v));
@@ -45,7 +45,7 @@ BoardGraph::distance_t BoardGraph::heuristic(const BoardGraph::vertex_t &v1, con
         IntMatrix m;
         m.resize(size, size);
 
-        auto index = m.zero();
+        auto index = m.szero();
         for (auto box : v1.boxes()) {
             for (auto goal : v1.goals()) {
                 distance_t d = Manhattan_Distance(box, goal);
@@ -78,7 +78,7 @@ BoardGraph::distance_t BoardGraph::greedy_search(const IntMatrix &m)
     };
 
     auto mask_p = [&mask](Pos p) {
-        for(auto i=mask.zero(); i<mask.row_size(); ++i) {
+        for(auto i=mask.szero(); i<mask.row_size(); ++i) {
             mask.set(Pos(i, p.col()), true);
             mask.set(Pos(p.row(), i), true);
         }
@@ -90,8 +90,8 @@ BoardGraph::distance_t BoardGraph::greedy_search(const IntMatrix &m)
 
     PosVector pq;
 
-    for (auto row=m.zero(); row<m.row_size(); ++row) {
-        for (auto col=m.zero(); col<m.col_size(); ++col) {
+    for (auto row=m.szero(); row<m.row_size(); ++row) {
+        for (auto col=m.szero(); col<m.col_size(); ++col) {
             pq.push_back(Pos(row, col));
             std::push_heap(begin(pq), end(pq), comp);
         }

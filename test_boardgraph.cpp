@@ -35,5 +35,8 @@ void test_baordgraph()
         assert(!path.first.empty());
         qDebug() << timer.elapsed();
         qDebug()<< "move size: "<<path.second;
+        for (const auto & m : path.first) {
+            print(m);
+        }
     }
 }
