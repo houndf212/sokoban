@@ -5,6 +5,8 @@
 void BoardParam::set_matrix(const ElementsMatrix &m)
 {
     m_room = m;
+    m_goals.clear();
+    box_index.clear();
 
     for (auto row=m.szero(); row<m.row_size(); ++row) {
         for (auto col=m.szero(); col<m.col_size(); ++col) {

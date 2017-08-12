@@ -13,8 +13,22 @@ void BoardWidget::setMatrix(const ElementsMatrix &m)
 {
     board.set_matrix(m);
     buffer_pix = QPixmap(m.col_size()*k_width, m.row_size()*k_height);
-    resize(buffer_pix.size());
+    setFixedSize(buffer_pix.size());
     createPixBuffer();
+}
+
+bool BoardWidget::man_move(Direction d)
+{
+    bool b = board.man_move(d);
+    if (b) {
+        createPixBuffer();
+    }
+    return b;
+}
+
+bool BoardWidget::is_done() const
+{
+    return board.is_done();
 }
 
 void BoardWidget::paintEvent(QPaintEvent *event)
@@ -23,34 +37,6 @@ void BoardWidget::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setWindow(0, 0, buffer_pix.width(), buffer_pix.height());
     painter.drawPixmap(0, 0, buffer_pix);
-}
-
-void BoardWidget::keyPressEvent(QKeyEvent *event)
-{
-    auto key = event->key();
-
-    Direction d = Direction::NotValid;
-    switch (key) {
-    case Qt::Key_Left:
-        d = Direction::left;
-        break;
-    case Qt::Key_Right:
-        d = Direction::right;
-        break;
-    case Qt::Key_Up:
-        d = Direction::up;
-        break;
-    case Qt::Key_Down:
-        d = Direction::down;
-        break;
-    default:
-        return;
-        break;
-    }
-    bool b = board.man_move(d);
-    if (b) {
-        createPixBuffer();
-    }
 }
 
 void BoardWidget::createPixBuffer()

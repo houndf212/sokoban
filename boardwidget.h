@@ -10,10 +10,12 @@ public:
     explicit BoardWidget(QWidget *parent=nullptr);
 
     void setMatrix(const ElementsMatrix &m);
+    BoardParam getBoard() const { return board; }
+    bool man_move(Direction d);
+    bool is_done() const;
     // QWidget interface
 protected:
     virtual void paintEvent(QPaintEvent *event) override;
-    virtual void keyPressEvent(QKeyEvent *event) override;
 private:
     void createPixBuffer();
 private:

@@ -2,6 +2,7 @@
 #include "boardwidget.h"
 #include "xsb.h"
 #include "boardparam.h"
+#include "gamewindow.h"
 
 void test()
 {
@@ -16,16 +17,12 @@ void test()
 
 int main(int argc, char *argv[])
 {
-    test();
-    return 0;
+//    test();
+//    return 0;
     QApplication a(argc, argv);
 
-    ElementsMatrix m = XSB::from_file("board.xsb");
-    BoardParam param;
-    param.set_matrix(m);
-
-    BoardWidget w;
-    w.setMatrix(m);
+    GameWindow w;
     w.show();
+
     return a.exec();
 }

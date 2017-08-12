@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/games">
+        <file>m1.xsb</file>
+		<file>m2.xsb</file>
+		<file>m3.xsb</file>
+		<file>m4.xsb</file>
+		<file>m5.xsb</file>
+    </qresource>
+</RCC>
