@@ -13,9 +13,11 @@ public:
     typedef Pos vertex_t;
     typedef MaskMatrix::size_type distance_t;
     typedef PosHash hash_t;
-    typedef std::vector<Pos> VertexVector;
+    typedef PosVector VertexVector;
 
     MatrixGraph(const ElementsMatrix &m);
+
+    PosList shortest_path(Pos start, Pos goal) const;
 
     VertexVector neighbors(vertex_t v1) const;
 

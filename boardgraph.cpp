@@ -22,6 +22,19 @@ size_t BoardGraph::BoardHash::operator()(const BoardParam &param) const
     return std::hash<std::string>()(str);
 }
 
+MoveList BoardGraph::solve(const BoardGraph::vertex_t &start)
+{
+    typedef BoardGraph BG;
+    typedef Dijkstra<BG> G;
+    BG graph;
+
+    auto path = G::AStart_path(graph, start, start.to_goal());
+    path.first.push_front(start);
+    auto mlst = trans_to(path.first);
+    assert(start.can_solve(mlst));
+    return mlst;
+}
+
 BoardGraph::VertexList BoardGraph::neighbors(const vertex_t &param)
 {
     return param.next_move();

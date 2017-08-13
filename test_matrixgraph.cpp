@@ -1,7 +1,6 @@
 ﻿#include "matrixgraph.h"
 #include "xsb.h"
 #include "boardparam.h"
-#include "dijkstra.h"
 
 void test_matrixgraph()
 {
@@ -28,9 +27,8 @@ void test_matrixgraph()
 
     print(start);
 
-    typedef Dijkstra<MatrixGraph> G;
     MatrixGraph g(start.room());
 
-    auto path = G::AStart_path(g, p_start, p_end);
-    print(path.first);
+    auto path = g.shortest_path(p_start, p_end);
+    print(path);
 }

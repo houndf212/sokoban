@@ -1,5 +1,4 @@
 ﻿#include "boardgraph.h"
-#include "dijkstra.h"
 #include "xsb.h"
 #include <QtCore>
 
@@ -12,10 +11,6 @@ void test_baordgraph()
 
     BoardParam goal = start.to_goal();
 //    print(goal);
-
-    typedef BoardGraph BG;
-    typedef Dijkstra<BG> G;
-    BG graph;
 
 //    {
 //        QElapsedTimer timer;
@@ -30,16 +25,8 @@ void test_baordgraph()
     {
         QElapsedTimer timer;
         timer.start();
-        auto path = G::AStart_path(graph, start, goal);
-        assert(!path.first.empty());
-        qDebug() << "cost time: " << timer.elapsed();
-        auto vecs = path.first;
-        vecs.push_front(start);
-//        for (const auto &m : vecs) {
-//            print(m);
-//        }
-        auto mlst = BG::trans_to(vecs);
+
+        auto mlst = BoardGraph::solve(start);
         print(mlst);
-        assert(start.can_solve(mlst));
     }
 }

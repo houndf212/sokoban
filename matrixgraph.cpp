@@ -1,4 +1,5 @@
 ﻿#include "matrixgraph.h"
+#include "dijkstra.h"
 
 size_t MatrixGraph::PosHash::operator()(const Pos &p) const
 {
@@ -22,6 +23,13 @@ MatrixGraph::MatrixGraph(const ElementsMatrix &m)
                 matrix.mask(p);
         }
     }
+}
+
+PosList MatrixGraph::shortest_path(Pos start, Pos goal) const
+{
+    typedef Dijkstra<MatrixGraph> G;
+    auto path = G::AStart_path(*this, start, goal);
+    return path.first;
 }
 
 MatrixGraph::VertexVector MatrixGraph::neighbors(MatrixGraph::vertex_t v1) const

@@ -1,7 +1,6 @@
 #include "gamewindow.h"
 #include "xsb.h"
 #include "boardgraph.h"
-#include "dijkstra.h"
 
 GameWindow::GameWindow()
 {
@@ -71,15 +70,12 @@ void GameWindow::loadCombo()
 {
     QSignalBlocker block(cmb);
 
-    const QString str = ":/games/m%1.xsb";
+    QDir dir(":/games");
 
-    int i=1;
-    while(true) {
-        QString filename = str.arg(i++);
-        if (!QFile::exists(filename))
-            break;
-
-        ElementsMatrix em = XSB::from_file(filename.toStdString().c_str());
+    for (auto info : dir.entryInfoList())  {
+        QString filepath = info.absoluteFilePath();
+        QString filename = info.fileName();
+        ElementsMatrix em = XSB::from_file(filepath.toStdString().c_str());
         cmb->addItem(filename);
         board_map.emplace(filename, em);
     }
@@ -126,17 +122,7 @@ void GameWindow::enterAutoSolve()
     btn_solve->setText("stop");
     cmb->setEnabled(false);
 
-    typedef BoardGraph BG;
-    typedef Dijkstra<BG> G;
-
-    BG graph;
-    auto start = board->getBoard();
-    auto goal = start.to_goal();
-
-    auto path = G::AStart_path(graph, start, goal);
-    path.first.push_front(start);
-    mlst = BG::trans_to(path.first);
-    assert(start.can_solve(mlst));
+    mlst = BoardGraph::solve(board->getBoard());
     timer->start(400);
 }
 
