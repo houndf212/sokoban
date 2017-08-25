@@ -12,7 +12,7 @@ void test()
     extern void test_assignmentproblem();
     extern void test_baordgraph();
     extern void test_matrixgraph();
-    test_baordgraph();
+//    test_baordgraph();
 }
 
 int main(int argc, char *argv[])
