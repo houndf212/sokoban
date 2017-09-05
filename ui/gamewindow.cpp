@@ -1,4 +1,4 @@
-#include "gamewindow.h"
+﻿#include "gamewindow.h"
 #include "xsb.h"
 #include "boardgraph.h"
 
@@ -111,6 +111,7 @@ void GameWindow::onTimeout()
     Direction d = mlst.front();
     mlst.pop_front();
     bool b = board->man_move(d);
+    Q_UNUSED(b);
     assert(b==true);
 }
 

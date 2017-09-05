@@ -12,7 +12,7 @@ public:
 
     bool man_move(Direction &d);
 
-    Pos man() const { return man_pos; }
+    const Pos &man() const { return man_pos; }
 
     type_size goals_size() const { return m_goals.size(); }
     const PosVector &goals() const { return m_goals; }

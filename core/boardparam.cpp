@@ -45,12 +45,12 @@ bool BoardParam::man_move(Direction &d)
 {
     assert(d!=Direction::NotValid);
 
-    Pos to = man_pos.move(d);
+    Pos to = man().move(d);
 
-    if (!m_room.isInMatrix(to))
+    if (!room().isInMatrix(to))
         return false;
 
-    auto el = m_room.get(to);
+    auto el = room().get(to);
     switch (el) {
     case Elements::wall:
         return false;
@@ -60,10 +60,10 @@ bool BoardParam::man_move(Direction &d)
         return true;
     case Elements::box: {
         Pos too = to.move(d);
-        if (!m_room.isInMatrix(too))
+        if (!room().isInMatrix(too))
             return false;
 
-        if (m_room.get(too) == Elements::floor) {
+        if (room().get(too) == Elements::floor) {
             box_move(to, too);
             d = add_push(d);
             return true;
@@ -80,11 +80,11 @@ bool BoardParam::man_move(Direction &d)
 void BoardParam::box_move(Pos box, Pos to)
 {
     assert(box.to(to) != Direction::NotValid);
-    assert(m_room.isInMatrix(box));
-    assert(m_room.isInMatrix(to));
-    assert(m_room.get(box) == Elements::box);
-    assert(m_room.get(to) == Elements::floor);
-    assert(box == Pos((man_pos.row()+to.row())/2, (man_pos.col()+to.col())/2));
+    assert(room().isInMatrix(box));
+    assert(room().isInMatrix(to));
+    assert(room().get(box) == Elements::box);
+    assert(room().get(to) == Elements::floor);
+    assert(box == Pos((man().row()+to.row())/2, (man().col()+to.col())/2));
 
     man_pos = box;
     m_room.set(box, Elements::floor);
@@ -112,7 +112,7 @@ std::list<BoardParam> BoardParam::next_move() const
         }
     };
 
-    for (auto p : box_index) {
+    for (auto p : boxes()) {
         func(p, Direction::up);
         func(p, Direction::down);
         func(p, Direction::left);
@@ -123,15 +123,15 @@ std::list<BoardParam> BoardParam::next_move() const
 
 bool BoardParam::can_box_move(Pos box, Direction d) const
 {
-    assert(m_room.isInMatrix(box));
-    assert(m_room.get(box) == Elements::box);
+    assert(room().isInMatrix(box));
+    assert(room().get(box) == Elements::box);
     Pos to = box.move(d);
-    if (m_room.get(to) != Elements::floor) {
+    if (room().get(to) != Elements::floor) {
         return false;
     }
 
     Pos man_to = box.move(reverse(d));
-    if (m_room.get(man_to) != Elements::floor) {
+    if (room().get(man_to) != Elements::floor) {
         return false;
     }
 
@@ -154,8 +154,8 @@ bool BoardParam::like_equal(const BoardParam &param) const
 
 bool BoardParam::is_done() const
 {
-    for (auto p : m_goals) {
-        if (m_room.get(p) != Elements::box)
+    for (auto p : goals()) {
+        if (room().get(p) != Elements::box)
             return false;
     }
     return true;
@@ -163,13 +163,13 @@ bool BoardParam::is_done() const
 
 bool BoardParam::is_goal(Pos p) const
 {
-    return std::find(begin(m_goals), end(m_goals), p) != end(m_goals);
+    return std::find(begin(goals()), end(goals()), p) != end(goals());
 }
 
 bool BoardParam::is_absolutely_dead_box(Pos box) const
 {
     // 左上右下  相邻 两个方向都是 墙 那么一定死了
-    assert(m_room.get(box) == Elements::box);
+    assert(room().get(box) == Elements::box);
     //假定 board 周围必须有一堵墙卡住
     constexpr auto wall = Elements::wall;
     Pos left(box.row(), box.col()-1);
@@ -177,8 +177,8 @@ bool BoardParam::is_absolutely_dead_box(Pos box) const
     Pos right(box.row(), box.col()+1);
     Pos down(box.row()+1, box.col());
 
-    if ((m_room.get(left) == wall || m_room.get(right) == wall)
-            && (m_room.get(up) == wall || m_room.get(down) == wall)) {
+    if ((room().get(left) == wall || room().get(right) == wall)
+            && (room().get(up) == wall || room().get(down) == wall)) {
         return true;
 
     }
@@ -187,7 +187,7 @@ bool BoardParam::is_absolutely_dead_box(Pos box) const
 
 bool BoardParam::is_absolutely_dead() const
 {
-    for (auto p : box_index) {
+    for (auto p : boxes()) {
         if (!is_goal(p) && is_absolutely_dead_box(p))
             return true;
     }
@@ -196,11 +196,11 @@ bool BoardParam::is_absolutely_dead() const
 
 ElementsMatrix BoardParam::to_matrix() const
 {
-    ElementsMatrix m = m_room;
+    ElementsMatrix m = room();
 
-    m.set(man_pos, Elements::man);
+    m.set(man(), Elements::man);
 
-    for (auto p : m_goals) {
+    for (auto p : goals()) {
         auto e = m.get(p);
         m.set(p, add_goal(e));
     }
@@ -210,14 +210,13 @@ ElementsMatrix BoardParam::to_matrix() const
 BoardParam BoardParam::to_goal() const
 {
     BoardParam pa = *this;
-    for (auto p : pa.box_index) {
+    for (auto p : pa.boxes()) {
         pa.m_room.set(p, Elements::floor);
     }
 
-    pa.box_index.clear();
-    for (auto p : pa.m_goals) {
+    pa.box_index = pa.goals();
+    for (auto p : pa.boxes()) {
         pa.m_room.set(p, Elements::box);
-        pa.box_index.push_back(p);
     }
     return pa;
 }

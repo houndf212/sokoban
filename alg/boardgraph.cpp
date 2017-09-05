@@ -51,6 +51,7 @@ BoardGraph::distance_t BoardGraph::heuristic(const BoardGraph::vertex_t &v1, con
 {
     //这个函数需要调整，当goal的数值过大的时候，这里的计算成为了瓶颈
     assert(v2.is_done());
+    Q_UNUSED(v2);
 
     const auto size = v1.goals_size();
     if (size >= 4) {
