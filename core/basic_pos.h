@@ -53,17 +53,17 @@ public:
         }
         return to;
     }
-    Direction to(Basic_Pos p) const
+    Direction to(const Basic_Pos &p) const
     {
-        auto drow = p.row() - row();
-        auto dcol = p.col() - col();
-        if (drow == 0) {
+        if (row() == p.row()) {
+            auto dcol = p.col() - col();
             if (dcol == 1)
                 return Direction::right;
             else if (dcol == -1)
                 return Direction::left;
         }
-        else if (dcol == 0) {
+        else if (col() == p.col()) {
+            auto drow = p.row() - row();
             if (drow == 1)
                 return Direction::down;
             else if (drow == -1)
