@@ -37,6 +37,7 @@ void print(const IntMatrix &m)
 {
     for (auto row=m.szero(); row<m.row_size(); ++row) {
         for (auto col=m.szero(); col<m.col_size(); ++col) {
+            cout.width(2);
             cout<<m.get(Pos(row, col));
             cout<<" ";
         }
