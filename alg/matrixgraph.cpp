@@ -14,14 +14,11 @@ MatrixGraph::MatrixGraph(const ElementsMatrix &m)
     matrix.resize(m.row_size(), m.col_size());
     matrix.unmask_all();
 
-    for (auto row=m.szero(); row<m.row_size(); ++row) {
-        for (auto col=m.szero(); col<m.col_size(); ++col) {
-            Pos p(row, col);
-            auto e = m.get(p);
-            //mask表示可行路径
-            if (e == Elements::floor)
-                matrix.mask(p);
-        }
+    auto range = m.range();
+    for (auto it=range.first; it!=range.second; ++it) {
+        //mask表示可行路径
+        if (*it == Elements::floor)
+            matrix.mask(it.pos());
     }
 }
 

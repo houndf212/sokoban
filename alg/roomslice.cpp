@@ -9,22 +9,20 @@ RoomSlice::RoomSlice(const BoardParam &pa)
     slice.fill(k_unflagged);
 
     IntMatrix::value_type g = 1;
-    for (auto row=matrix.szero(); row<matrix.row_size(); ++row) {
-        for (auto col=matrix.szero(); col<matrix.col_size(); ++col) {
-            Pos p(row, col);
+    auto range = matrix.range();
+    for (auto it=range.first; it!=range.second; ++it) {
+        Pos p = it.pos();
+        if (slice.get(p) != k_unflagged)
+            continue;
 
-            if (slice.get(p) != k_unflagged)
-                continue;
-
-            auto e = matrix.get(p);
-            if (e!=Elements::floor) {
-                slice.set(p, k_block);
-                continue;
-            }
-
-            seedPos(p, g);
-            ++g;
+        auto e = *it;
+        if (e!=Elements::floor) {
+            slice.set(p, k_block);
+            continue;
         }
+
+        seedPos(p, g);
+        ++g;
     }
 }
 

@@ -44,15 +44,14 @@ void BoardWidget::createPixBuffer()
     auto matrix = board.to_matrix();
 
     QPainter painter(&buffer_pix);
-    for (auto row=matrix.szero(); row<matrix.row_size(); ++row) {
-        for (auto col=matrix.szero(); col<matrix.col_size(); ++col) {
-            Pos p(row, col);
-            QPixmap pix = image.get_image(matrix.get(p));
-            painter.drawPixmap(k_width*col,
-                               k_height*row,
-                               pix);
-        }
+    auto range = matrix.range();
+    for (auto it=range.first; it!=range.second; ++it) {
+        QPixmap pix = image.get_image(*it);
+        painter.drawPixmap(k_width*it.pos().col(),
+                           k_height*it.pos().row(),
+                           pix);
     }
+
     update();
 }
 
