@@ -2,12 +2,24 @@
 #define HUNGARIANALG_H
 #include "types.h"
 #include <algorithm>
+#include <bitset>
 
 template<class T>
 class HungarianAlg
 {
+private:
+    enum class Step
+    {
+        Done,
+        One,
+        Two,
+        Three,
+        Four,
+        Five,
+    };
 public:
-    void solve(const Basic_Resize_Matrix<T, type_size> &m)
+    IntMatrix mask() const { return mask_matrix; }
+    std::pair<PosVector, T> solve(const Basic_Resize_Matrix<T, type_size> &m)
     {
         assert(m.row_size() == m.col_size());
         const auto size = m.row_size();
@@ -15,6 +27,7 @@ public:
         //复制矩阵用来操作
         matrix = m;
 
+        mask_matrix.resize(matrix.row_size(), matrix.col_size());
         mask_matrix.fill(NORMAL);
 
         //先设置全部未标记
@@ -24,42 +37,103 @@ public:
         col_mask.resize(size);
         clear_mask(col_mask);
 
+        minimize_row(matrix);
+        minimize_col(matrix);
+
         // Follow the steps
-        int step = 1;
-        while ( step ) {
+        Step step = Step::One;
+        while ( step != Step::Done ) {
             switch ( step ) {
-            case 1:
+            case Step::One:
                 step = step1();
                 // step is always 2
                 break;
-            case 2:
+            case Step::Two:
                 step = step2();
                 // step is always either 0 or 3
                 break;
-            case 3:
+            case Step::Three:
                 step = step3();
                 // step in [3, 4, 5]
                 break;
-            case 4:
+            case Step::Four:
                 step = step4();
                 // step is always 2
                 break;
-            case 5:
+            case Step::Five:
                 step = step5();
                 // step is always 3
                 break;
+            case Step::Done:
+            default:
+                assert(false);
+                break;
             }
         }
+        return calc_min(m, mask_matrix);
     }
-//private:
+private:
+    // helper func
+    //计算最小值
+    static std::pair<PosVector, T> calc_min(const Basic_Resize_Matrix<T, type_size> &m, const IntMatrix &mask)
+    {
+        PosVector vec;
+        T sum = 0;
+        for (auto row=m.szero(); row<m.row_size(); ++row) {
+            for (auto col=m.szero(); col<m.col_size(); ++col) {
+                Pos p(row, col);
+                if (mask.get(p) == STAR) {
+                    vec.push_back(p);
+                    sum += m.get(p);
+                }
+            }
+        }
+        return std::make_pair(vec, sum);
+    }
+    //清空mask
     static void clear_mask(std::vector<bool> &mask)
     {
         std::fill(begin(mask), end(mask), false);
     }
-    static void minimize_row(Basic_Resize_Matrix<T, type_size> &m);
-    static void minimize_col(Basic_Resize_Matrix<T, type_size> &m);
+    //每行减去行最小值
+    static void minimize_row(Basic_Resize_Matrix<T, type_size> &m)
+    {
+        assert(m.row_size()>=2 && m.col_size()>=2);
 
-    bool find_uncovered_zero_in_matrix(type_size &row, type_size &col)
+        for (auto row=m.szero(); row<m.row_size(); ++row) {
+
+            auto min_val = m.vmax();
+            for (auto col=m.szero(); col<m.col_size(); ++col) {
+                min_val = std::min(min_val, m.get(Pos(row, col)));
+            }
+
+            for (auto col=m.szero(); col<m.col_size(); ++col) {
+                Pos p(row, col);
+                m.set(p, m.get(p)-min_val);
+            }
+        }
+    }
+    //每列减去列最小值
+    static void minimize_col(Basic_Resize_Matrix<T, type_size> &m)
+    {
+        assert(m.row_size()>=2 && m.col_size()>=2);
+
+        for (auto col=m.szero(); col<m.col_size(); ++col) {
+
+            auto min_val = m.vmax();
+            for (auto row=m.szero(); row<m.row_size(); ++row) {
+                min_val = std::min(min_val, m.get(Pos(row, col)));
+            }
+
+            for (auto row=m.szero(); row<m.row_size(); ++row) {
+                Pos p(row, col);
+                m.set(p, m.get(p)-min_val);
+            }
+        }
+    }
+private:
+    //找到未被覆盖的 0 ，即是 独立0 也就是 prime
+    bool find_uncovered_zero_in_matrix(type_size &row, type_size &col) const
     {
         for (row=matrix.szero(); row<matrix.row_size(); ++row) {
             if (row_mask[row])
@@ -75,8 +149,8 @@ public:
         }
         return false;
     }
-
-    bool star_in_row(int row, int &col)
+    //找到此行 的 star 标记
+    bool star_in_row(int row, int &col) const
     {
         for (col=mask_matrix.szero(); col<mask_matrix.col_size(); ++col) {
             if (mask_matrix.get(Pos(row, col)) == STAR) {
@@ -86,6 +160,7 @@ public:
         return false;
     }
 
+    //找到未被标记的 最小值
     T find_smallest_in_uncover() const
     {
         auto h = matrix.vmax();
@@ -100,11 +175,12 @@ public:
                 h = std::min(h, matrix.get(Pos(row, col)));
             }
         }
-
+        assert(h!=matrix.vmax());
         return h;
     }
 
-    int step1()
+    //标记 star :每列只取一个 0 标记为 star (优先取行！)
+    Step step1()
     {
         std::vector<bool> row_cover(matrix.row_size(), false);
         std::vector<bool> col_cover(matrix.col_size(), false);
@@ -122,14 +198,16 @@ public:
                     mask_matrix.set(p, STAR);
                     row_cover[row] = true;
                     col_cover[col] = true;
+                    break;
                 }
             }
         }
 
-        return 2;
+        return Step::Two;
     }
 
-    int step2()
+    //计算列标记条数(由于算法可以计算 mxn 匹配，所以列数大于行数，固这里要计算)
+    Step step2()
     {
         int covercount = 0;
         for (auto row=mask_matrix.szero(); row<mask_matrix.row_size(); ++row) {
@@ -141,31 +219,44 @@ public:
             }
         }
 
-        assert(matrix.row_size() == matrix.col_size());
+        //如果 超过 行数 那么已经是最优匹配
         if (covercount >= matrix.row_size()) {
-            return 0;
+            return Step::Done;
         }
-
-        return 3;
+        else {
+            return Step::Three;
+        }
     }
 
-    int step3()
+    Step step3()
     {
-        if (find_uncovered_zero_in_matrix(saverow, savecol))
-            mask_matrix.set(Pos(saverow, savecol), PRIME);
-        else
-            return 5;
+        //如果找到一个未被覆盖的0 那么这个0 一定是主元
+        if (find_uncovered_zero_in_matrix(saverow, savecol)) {
 
-        int col = -1;
-        if (star_in_row(saverow, col)) {
-            row_mask[saverow] = true;
-            col_mask[col] = false;
-            return 3;
+            //设置为主元
+            mask_matrix.set(Pos(saverow, savecol), PRIME);
+
+            //这个算法以行为主，所以如果这一行有其他标星的0 那么 只需要标记这一行,并取消标记这一列
+            //那么这个0未被标记的0 就一定会被标记,如此循环，那么 一定会出现一个 行无标星的0，那么跳到step4
+            int col = -1;
+            if (star_in_row(saverow, col)) {
+                row_mask[saverow] = true;
+                col_mask[col] = false;
+                return Step::Three;
+            }
+            else {
+                return Step::Four;
+            }
         }
-        return 4;
+        //如果 没有未被覆盖的0 那么就创造一个 0
+        else {
+            return Step::Five;
+        }
     }
 
-    int step4()
+    //交换 prime 和star
+    //这一步完成， 会增加一个标星 0
+    Step step4()
     {
         PosVector seq;
 
@@ -235,10 +326,11 @@ public:
 
         clear_mask(row_mask);
         clear_mask(col_mask);
-        return 2;
+        return Step::Two;
     }
 
-    int step5()
+    //在未标记的列中制作出一个0
+    Step step5()
     {
         auto h = find_smallest_in_uncover();
 
@@ -260,64 +352,29 @@ public:
             }
         }
 
-        return 3;
+        return Step::Three;
     }
 
 private:
+    //覆盖矩阵 记录 normal star prime
     IntMatrix mask_matrix;
+    //记录操作矩阵
     Basic_Resize_Matrix<T, type_size> matrix;
+    //标记的行
     std::vector<bool> row_mask;
+    //标记的列
     std::vector<bool> col_mask;
-    type_size saverow = 0;
-    type_size savecol = 0;
+    //记录 未被覆盖的 0 即主元  prime
+    type_size saverow;
+    type_size savecol;
 
 private:
-    static constexpr int NORMAL = 0;
-    static constexpr int STAR   = 1;
-    static constexpr int PRIME  = 2;
+    //一般元素
+    static constexpr T NORMAL = 0;
+    //分配元素 标星
+    static constexpr T STAR   = 1;
+    //主元
+    static constexpr T PRIME  = 2;
 };
-
-template<class T>
-void HungarianAlg<T>::minimize_row(Basic_Resize_Matrix<T, type_size> &m)
-{
-    assert(m.row_size()>=2 && m.col_size()>=2);
-    for (auto row=m.szero(); row<m.row_size(); ++row) {
-
-        auto min_val = m.get(Pos(row, 0));
-        for (auto col=m.szero(); col<m.col_size(); ++col) {
-            min_val = std::min(min_val, m.get(Pos(row, col)));
-        }
-
-        for (auto col=m.szero(); col<m.col_size(); ++col) {
-            Pos p(row, col);
-            m.set(p, m.get(p)-min_val);
-        }
-    }
-}
-
-template<class T>
-void HungarianAlg<T>::minimize_col(Basic_Resize_Matrix<T, type_size> &m)
-{
-    assert(m.row_size()>=2 && m.col_size()>=2);
-
-    for (auto col=m.szero(); col<m.col_size(); ++col) {
-
-        auto min_val = m.get(Pos(0, col));
-        for (auto row=m.szero(); row<m.row_size(); ++row) {
-            min_val = std::min(min_val, m.get(Pos(row, col)));
-        }
-
-        for (auto row=m.szero(); row<m.row_size(); ++row) {
-            Pos p(row, col);
-            m.set(p, m.get(p)-min_val);
-        }
-    }
-}
-
-
-
-
-
-
 
 #endif // HUNGARIANALG_H

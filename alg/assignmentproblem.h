@@ -1,7 +1,7 @@
 ﻿#ifndef ASSIGNMENTPROBLEM_H
 #define ASSIGNMENTPROBLEM_H
 #include "types.h"
-#include <algorithm>
+#include "hungarianalg.h"
 
 namespace AssignmentProblem
 {
@@ -44,21 +44,19 @@ enumeration_method(const IntMatrix &m)
     return std::make_pair(min_vec, min);
 }
 
-//匈牙利算法过于复杂暂时不实现了
 template<typename weight_t>
 std::pair<PosVector, weight_t>
 hungarian_method(const IntMatrix &m)
 {
-    Q_UNUSED(m);
-    assert(false);
-    return std::make_pair(PosVector(), 0);
+    HungarianAlg<IntMatrix::value_type> hun;
+    return hun.solve(m);
 }
 
 template<typename weight_t>
 std::pair<PosVector, weight_t>
 min_assignment(const IntMatrix &m)
 {
-    if (m.row_size() <=6)
+    if (m.row_size() <= 5)
         return enumeration_method<weight_t>(m);
     else
         return hungarian_method<weight_t>(m);

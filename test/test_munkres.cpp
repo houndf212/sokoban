@@ -26,66 +26,84 @@
 #include <ctime>
 
 #include "munkres.h"
+#include "hungarianalg.h"
+#include "debug_print.h"
+
+IntMatrix from(const Matrix<int> &m)
+{
+    IntMatrix matrix;
+    matrix.resize(m.rows(), m.columns());
+
+    for (size_t row=0; row<m.rows(); ++row) {
+        for (size_t col=0; col<m.columns(); ++col) {
+            matrix.set(Pos(row, col), m(row, col));
+        }
+    }
+    return matrix;
+}
+
+IntMatrix munkres(Matrix<int> matrix)
+{
+    // Apply Munkres algorithm to matrix.
+    Munkres<int> m;
+    m.solve(matrix);
+    IntMatrix ret = from(m.mask_matrix);
+    return ret;
+}
+
+IntMatrix hunalg(const IntMatrix &m)
+{
+    typedef HungarianAlg<IntMatrix::value_type> Hun;
+    Hun hun;
+    hun.solve(m);
+    return hun.mask();
+}
+
+int check_min(const IntMatrix& m, const IntMatrix &mask)
+{
+    int sum=0;
+    for (auto row=m.szero(); row<m.row_size(); ++row) {
+        for (auto col=m.szero(); col<m.col_size(); ++col) {
+            Pos p(row, col);
+            if (mask.get(p) == 1)
+                sum += m.get(p);
+        }
+    }
+    return sum;
+}
+
+void test_hunalg_and_munkres()
+{
+    int nrows = 10;
+    int ncols = 10;
+
+    Matrix<int> matrix(nrows, ncols);
+
+
+    // Initialize matrix with random values.
+    for ( int row = 0 ; row < nrows ; row++ ) {
+        for ( int col = 0 ; col < ncols ; col++ ) {
+            int val = std::rand() % 100;
+            matrix(row,col) = val;
+        }
+    }
+
+    IntMatrix mat = from(matrix);
+
+    auto ret1 = munkres(matrix);
+    auto ret2 = hunalg(mat);
+    if (check_min(mat, ret1)!=check_min(mat, ret2)) {
+        print(mat);
+        print(ret1);
+        print(ret2);
+    }
+}
 
 void test_munkres()
 {
-    int nrows = 5;
-    int ncols = 5;
-	
-    Matrix<int> matrix(nrows, ncols);
-	
     std::srand(time(nullptr)); // Seed random number generator.
-
-	// Initialize matrix with random values.
-	for ( int row = 0 ; row < nrows ; row++ ) {
-		for ( int col = 0 ; col < ncols ; col++ ) {
-            matrix(row,col) = std::rand() % 100;
-		}
-	}
-
-	// Display begin matrix state.
-	for ( int row = 0 ; row < nrows ; row++ ) {
-		for ( int col = 0 ; col < ncols ; col++ ) {
-			std::cout.width(2);
-			std::cout << matrix(row,col) << ",";
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
-
-	// Apply Munkres algorithm to matrix.
-    Munkres<int> m;
-	m.solve(matrix);
-
-	// Display solved matrix.
-	for ( int row = 0 ; row < nrows ; row++ ) {
-		for ( int col = 0 ; col < ncols ; col++ ) {
-			std::cout.width(2);
-			std::cout << matrix(row,col) << ",";
-		}
-		std::cout << std::endl;
-	}
-
-	std::cout << std::endl;
-
-	
-	for ( int row = 0 ; row < nrows ; row++ ) {
-		int rowcount = 0;
-		for ( int col = 0 ; col < ncols ; col++  ) {
-			if ( matrix(row,col) == 0 )
-				rowcount++;
-		}
-		if ( rowcount != 1 )
-			std::cerr << "Row " << row << " has " << rowcount << " columns that have been matched." << std::endl;
-	}
-
-	for ( int col = 0 ; col < ncols ; col++ ) {
-		int colcount = 0;
-		for ( int row = 0 ; row < nrows ; row++ ) {
-			if ( matrix(row,col) == 0 )
-				colcount++;
-		}
-		if ( colcount != 1 )
-			std::cerr << "Column " << col << " has " << colcount << " rows that have been matched." << std::endl;
-	}
+    int k=10000;
+    while(k-->0) {
+        test_hunalg_and_munkres();
+    }
 }

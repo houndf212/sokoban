@@ -1,4 +1,4 @@
-/*
+﻿/*
  *   Copyright (c) 2007 John Weaver
  *   Copyright (c) 2015 Miroslav Krajicek
  *
@@ -452,7 +452,7 @@ private:
 
     return 3;
   }
-
+public:
   Matrix<int> mask_matrix;
   Matrix<Data> matrix;
   bool *row_mask;
