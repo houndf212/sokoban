@@ -1,6 +1,7 @@
 ﻿#include "hungarianalg.h"
 #include <ctime>
 #include <cstdlib>
+#include "debug_print.h"
 
 typedef HungarianAlg<IntMatrix::value_type> Hun;
 
@@ -10,12 +11,8 @@ IntMatrix rand_matrix()
     IntMatrix m;
     m.resize(4, 4);
 
-    for (auto row=m.szero(); row<m.row_size(); ++row) {
-        for (auto col=m.szero(); col<m.col_size(); ++col) {
-            Pos p(row, col);
-            int val = rand() % 100;
-            m.set(p, val);
-        }
+    for (auto &v : m) {
+        v = rand() % 100;
     }
     return m;
 }
@@ -24,6 +21,7 @@ IntMatrix rand_matrix()
 void test_HungarianAlg()
 {
     IntMatrix mat = rand_matrix();
+    print(mat);
     Hun h;
     h.solve(mat);
 }

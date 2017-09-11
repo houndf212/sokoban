@@ -8,35 +8,34 @@ void BoardParam::set_matrix(const ElementsMatrix &m)
     m_goals.clear();
     box_index.clear();
 
-    for (auto row=m.szero(); row<m.row_size(); ++row) {
-        for (auto col=m.szero(); col<m.col_size(); ++col) {
-            Pos p(row, col);
-            auto e = m.get(p);
-            switch (e) {
-            case Elements::man:
-                man_pos = p;
-                m_room.set(p, Elements::floor);
-                break;
-            case Elements::box:
-                box_index.push_back(p);
-                break;
-            case Elements::goal:
-                m_goals.push_back(p);
-                m_room.set(p, Elements::floor);
-                break;
-            case Elements::man_goal:
-                man_pos = p;
-                m_goals.push_back(p);
-                m_room.set(p, Elements::floor);
-                break;
-            case Elements::box_goal:
-                box_index.push_back(p);
-                m_goals.push_back(p);
-                m_room.set(p, Elements::box);
-                break;
-            default:
-                break;
-            }
+    auto range = m.range();
+    for (auto it=range.first; it!=range.second; ++it) {
+        Pos p = it.pos();
+        auto e = *it;
+        switch (e) {
+        case Elements::man:
+            man_pos = p;
+            m_room.set(p, Elements::floor);
+            break;
+        case Elements::box:
+            box_index.push_back(p);
+            break;
+        case Elements::goal:
+            m_goals.push_back(p);
+            m_room.set(p, Elements::floor);
+            break;
+        case Elements::man_goal:
+            man_pos = p;
+            m_goals.push_back(p);
+            m_room.set(p, Elements::floor);
+            break;
+        case Elements::box_goal:
+            box_index.push_back(p);
+            m_goals.push_back(p);
+            m_room.set(p, Elements::box);
+            break;
+        default:
+            break;
         }
     }
 }

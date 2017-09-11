@@ -14,13 +14,14 @@ void test()
     extern void test_matrixgraph();
     extern void test_munkres();
     extern void test_HungarianAlg();
-    test_munkres();
+    extern void test_matrix_iterator();
+    test_HungarianAlg();
 }
 
 int main(int argc, char *argv[])
 {
-//    test();
-//    return 0;
+    test();
+    return 0;
     QApplication a(argc, argv);
 
     GameWindow w;

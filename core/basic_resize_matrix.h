@@ -27,7 +27,7 @@ public:
     void fill(value_type val)
     {
         for (auto &vec : m) {
-            std::fill(begin(vec), end(vec), val);
+            std::fill(std::begin(vec), std::end(vec), val);
         }
     }
 
@@ -72,6 +72,98 @@ private:
     size_type n_row;
     size_type n_col;
     std::vector<std::vector<value_type>> m;
+
+private:
+    //简单实现一个迭代器
+    class iterator
+    {
+        typedef value_type& reference;
+        friend class Basic_Resize_Matrix;
+        iterator(Basic_Resize_Matrix *m, size_type row, size_type col)
+            :matrix(m), p(row, col)
+        {}
+    public:
+        Basic_Pos<size_type> pos() const
+        {
+            return p;
+        }
+
+        reference operator*() const
+        {
+            return matrix->m[p.row()][p.col()];
+        }
+
+        iterator& operator++()
+        {
+            p.col()++;
+            p.row() += p.col() / matrix->col_size();
+            p.col() %= matrix->col_size();
+            return *this;
+        }
+
+        bool operator !=(const iterator &right) const
+        {
+            assert(matrix == right.matrix);
+            return  p != right.p;
+        }
+    private:
+        Basic_Resize_Matrix *matrix;
+        Basic_Pos<size_type> p;
+    };
+
+    class const_iterator
+    {
+        typedef const value_type& reference;
+        friend class Basic_Resize_Matrix;
+        const_iterator(const Basic_Resize_Matrix *m, size_type row, size_type col)
+            :matrix(m), p(row, col)
+        {}
+    public:
+        Basic_Pos<size_type> pos() const
+        {
+            return p;
+        }
+
+        reference operator*() const
+        {
+            return matrix->m[p.row()][p.col()];
+        }
+
+        const_iterator& operator++()
+        {
+            p.col()++;
+            p.row() += p.col() / matrix->col_size();
+            p.col() %= matrix->col_size();
+            return *this;
+        }
+
+        bool operator !=(const const_iterator &right) const
+        {
+            assert(matrix == right.matrix);
+            return  p != right.p;
+        }
+    private:
+        const Basic_Resize_Matrix *matrix;
+        Basic_Pos<size_type> p;
+    };
+public:
+    std::pair<iterator, iterator> range()
+    {
+        return std::make_pair(iterator(this, 0, 0),
+                              iterator(this, row_size(), 0));
+    }
+
+    std::pair<const_iterator, const_iterator> range() const
+    {
+        return std::make_pair(const_iterator(this, 0, 0),
+                              const_iterator(this, row_size(), 0));
+    }
+
+    iterator begin() { return iterator(this, 0, 0); }
+    iterator end() { return iterator(this, row_size(), 0); }
+
+    const_iterator begin() const { return const_iterator(this, 0, 0); }
+    const_iterator end() const { return const_iterator(this, row_size(), 0); }
 };
 
 template<typename T, typename S>
