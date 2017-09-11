@@ -12,12 +12,8 @@ size_t BoardGraph::BoardHash::operator()(const BoardParam &param) const
     std::string str;
     str.reserve(m.row_size()*m.col_size());
 
-    for (auto row=m.szero(); row<m.row_size(); ++row) {
-        for (auto col=m.szero(); col<m.col_size(); ++col) {
-            Pos p(row, col);
-            auto v = m.get(p);
-            str.push_back(static_cast<char>(v));
-        }
+    for( auto &v : m) {
+        str.push_back(static_cast<char>(v));
     }
     return std::hash<std::string>()(str);
 }
@@ -54,40 +50,32 @@ BoardGraph::distance_t BoardGraph::heuristic(const BoardGraph::vertex_t &v1, con
     Q_UNUSED(v2);
 
     const auto size = v1.goals_size();
-    if (size >= 4) {
-        //退化为最短路径搜索
-        return 0;
-    }
-    else {
-        IntMatrix m;
-        m.resize(size, size);
+    IntMatrix m;
+    m.resize(size, size);
 
-        auto index = m.szero();
-        for (auto box : v1.boxes()) {
-            for (auto goal : v1.goals()) {
-                distance_t d = Manhattan_Distance(box, goal);
-                Pos p(index/size, index%size);
-                m.set(p, d);
-                index++;
-            }
+    auto index = m.szero();
+    for (auto box : v1.boxes()) {
+        for (auto goal : v1.goals()) {
+            distance_t d = Manhattan_Distance(box, goal);
+            Pos p(index/size, index%size);
+            m.set(p, d);
+            index++;
         }
-
-        if (size <= 4) {
-            auto p = AssignmentProblem::min_assignment<distance_t>(m);
-            return p.second;
-        }
-        else
-            return greedy_search(m);
     }
 
+    auto p = AssignmentProblem::min_assignment<distance_t>(m);
+    return p.second;
 }
 
 BoardGraph::distance_t BoardGraph::greedy_search(const IntMatrix &m)
 {
+    //实现了 匈牙利算法,不需要贪婪搜索了
+    assert(false);
+
     assert(m.row_size() == m.col_size());
     const auto size = m.row_size();
     MaskMatrix mask;
-    mask.resize(size, size);
+    mask.resize(m.size());
     mask.unmask_all();
 
     auto mask_p = [&mask](Pos p) {
@@ -103,11 +91,10 @@ BoardGraph::distance_t BoardGraph::greedy_search(const IntMatrix &m)
 
     PosVector pq;
 
-    for (auto row=m.szero(); row<m.row_size(); ++row) {
-        for (auto col=m.szero(); col<m.col_size(); ++col) {
-            pq.push_back(Pos(row, col));
-            std::push_heap(begin(pq), end(pq), comp);
-        }
+    auto range = m.range();
+    for (auto it=range.first; it!=range.second; ++it) {
+        pq.push_back(it.pos());
+        std::push_heap(begin(pq), end(pq), comp);
     }
 
     distance_t weight = 0;

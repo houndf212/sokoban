@@ -11,7 +11,7 @@ size_t MatrixGraph::PosHash::operator()(const Pos &p) const
 
 MatrixGraph::MatrixGraph(const ElementsMatrix &m)
 {
-    matrix.resize(m.row_size(), m.col_size());
+    matrix.resize(m.size());
     matrix.unmask_all();
 
     auto range = m.range();

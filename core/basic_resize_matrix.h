@@ -24,6 +24,11 @@ public:
         m = std::vector<std::vector<value_type>>(row, vec);
     }
 
+    void resize(const std::pair<size_type, size_type> &p)
+    {
+        resize(p.first, p.second);
+    }
+
     void fill(value_type val)
     {
         for (auto &vec : m) {
@@ -54,17 +59,20 @@ public:
     size_type row_size() const { return n_row; }
     size_type col_size() const { return n_col; }
 
+    std::pair<size_type, size_type> size() const
+    {
+        return std::make_pair(row_size(), col_size());
+    }
+
     bool equal(const Basic_Resize_Matrix& bm) const
     {
-        assert(row_size() == bm.row_size());
-        assert(col_size() == bm.col_size());
+        assert(size()==bm.size());
         return m == bm.m;
     }
 
     bool less(const Basic_Resize_Matrix& bm) const
     {
-        assert(row_size() == bm.row_size());
-        assert(col_size() == bm.col_size());
+        assert(size()==bm.size());
         return m < bm.m;
     }
 

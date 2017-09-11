@@ -27,7 +27,7 @@ public:
         //复制矩阵用来操作
         matrix = m;
 
-        mask_matrix.resize(matrix.row_size(), matrix.col_size());
+        mask_matrix.resize(matrix.size());
         mask_matrix.fill(NORMAL);
 
         //先设置全部未标记
@@ -79,15 +79,15 @@ private:
     {
         PosVector vec;
         T sum = 0;
-        for (auto row=m.szero(); row<m.row_size(); ++row) {
-            for (auto col=m.szero(); col<m.col_size(); ++col) {
-                Pos p(row, col);
-                if (mask.get(p) == STAR) {
-                    vec.push_back(p);
-                    sum += m.get(p);
-                }
+
+        auto range = mask.range();
+        for (auto it=range.first; it!=range.second; ++it) {
+            if (*it == STAR) {
+                vec.push_back(it.pos());
+                sum += m.get(it.pos());
             }
         }
+
         return std::make_pair(vec, sum);
     }
     //清空mask
@@ -210,12 +210,12 @@ private:
     Step step2()
     {
         int covercount = 0;
-        for (auto row=mask_matrix.szero(); row<mask_matrix.row_size(); ++row) {
-            for (auto col=mask_matrix.szero(); col<mask_matrix.col_size(); ++col) {
-                if (STAR == mask_matrix.get(Pos(row, col))) {
-                    col_mask[col] = true;
-                    ++covercount;
-                }
+
+        auto range = mask_matrix.range();
+        for (auto it=range.first; it!=range.second; ++it) {
+            if (STAR == *it) {
+                col_mask[it.pos().col()] = true;
+                ++covercount;
             }
         }
 
@@ -316,12 +316,9 @@ private:
                 mask_matrix.set(p, STAR);
         }
 
-        for (auto row=mask_matrix.szero(); row<mask_matrix.row_size(); ++row) {
-            for (auto col=mask_matrix.szero(); col<mask_matrix.col_size(); ++col) {
-                Pos p(row, col);
-                if (mask_matrix.get(p) == PRIME)
-                    mask_matrix.set(p, NORMAL);
-            }
+        for (auto &v : mask_matrix) {
+            if (v == PRIME)
+                v = NORMAL;
         }
 
         clear_mask(row_mask);

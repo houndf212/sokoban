@@ -5,7 +5,7 @@ RoomSlice::RoomSlice(const BoardParam &pa)
 {
     const auto &matrix = param.room();
 
-    slice.resize(matrix.row_size(), matrix.col_size());
+    slice.resize(matrix.size());
     slice.fill(k_unflagged);
 
     IntMatrix::value_type g = 1;

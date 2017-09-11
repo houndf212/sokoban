@@ -10,7 +10,6 @@ template<typename weight_t>
 std::pair<PosVector, weight_t>
 enumeration_method(const IntMatrix &m)
 {
-    assert(m.row_size() == m.col_size());
     typedef std::vector<IntMatrix::size_type> ColVec;
     ColVec arr;
     arr.resize(m.row_size());
@@ -56,7 +55,10 @@ template<typename weight_t>
 std::pair<PosVector, weight_t>
 min_assignment(const IntMatrix &m)
 {
-    if (m.row_size() <= 5)
+    assert(m.row_size() == m.col_size());
+
+    //认为小于4 用迭代比较快
+    if (m.row_size() <= 4)
         return enumeration_method<weight_t>(m);
     else
         return hungarian_method<weight_t>(m);
