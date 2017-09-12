@@ -5,9 +5,10 @@
 template<typename M>
 class Basic_Position
 {
+public:
     typedef typename M::value_type value_type;
     typedef typename M::size_type size_type;
-public:
+
     Basic_Position(M *m, size_type row, size_type col)
         :matrix(m), pos(row, col)
     {}
@@ -25,9 +26,11 @@ public:
 template<class M, class reference>
 class Basic_Matrix_Iterator
 {
+public:
+    typedef reference reference_type;
     typedef typename M::value_type value_type;
     typedef typename M::size_type size_type;
-public:
+
     Basic_Matrix_Iterator(M *m, size_type row, size_type col)
         :position(m, row, col)
     {}
@@ -61,9 +64,11 @@ private:
 template<class M, class reference>
 class Basic_Matrix_Row_Iterator
 {
+public:
+    typedef reference reference_type;
     typedef typename M::value_type value_type;
     typedef typename M::size_type size_type;
-public:
+
     Basic_Matrix_Row_Iterator(M *m, size_type row, size_type col)
         :position(m, row, col)
     {}
@@ -95,9 +100,11 @@ private:
 template<class M, class reference>
 class Basic_Matrix_Col_Iterator
 {
+public:
+    typedef reference reference_type;
     typedef typename M::value_type value_type;
     typedef typename M::size_type size_type;
-public:
+
     Basic_Matrix_Col_Iterator(M *m, size_type row, size_type col)
         :position(m, row, col)
     {}
@@ -127,10 +134,42 @@ private:
 };
 
 template <typename T>
-struct IteratorRange
+class IteratorRange
 {
-    const T begin;
-    const T end;
+
+public:
+    IteratorRange(const T &a, const T& b) : m_begin(a), m_end(b) {}
+    Basic_Pos<typename T::size_type> pos() const
+    {
+        return m_begin.pos();
+    }
+
+    operator bool() const
+    {
+        return m_begin != m_end;
+    }
+
+    void operator ++()
+    {
+        ++m_begin;
+    }
+
+    void next()
+    {
+        ++m_begin;
+    }
+
+    typename T::reference_type operator *() const
+    {
+        return *m_begin;
+    }
+
+    T begin() const { return m_begin; }
+    T end() const { return m_end; }
+
+private:
+    T m_begin;
+    const T m_end;
 };
 
 #endif // BASIC_MATRIX_ITERATOR_H

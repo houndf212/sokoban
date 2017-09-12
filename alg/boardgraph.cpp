@@ -91,8 +91,8 @@ BoardGraph::distance_t BoardGraph::greedy_search(const IntMatrix &m)
 
     PosVector pq;
 
-    auto range = m.range();
-    for (auto it=range.begin; it!=range.end; ++it) {
+
+    for (auto it=m.range(); it; ++it) {
         pq.push_back(it.pos());
         std::push_heap(begin(pq), end(pq), comp);
     }

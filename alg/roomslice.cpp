@@ -9,8 +9,7 @@ RoomSlice::RoomSlice(const BoardParam &pa)
     slice.fill(k_unflagged);
 
     IntMatrix::value_type g = 1;
-    auto range = matrix.range();
-    for (auto it=range.begin; it!=range.end; ++it) {
+    for (auto it=matrix.range(); it; ++it) {
         Pos p = it.pos();
         if (slice.get(p) != k_unflagged)
             continue;

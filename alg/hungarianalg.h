@@ -80,8 +80,7 @@ private:
         PosVector vec;
         T sum = 0;
 
-        auto range = mask.range();
-        for (auto it=range.begin; it!=range.end; ++it) {
+        for (auto it=mask.range(); it; ++it) {
             if (*it == STAR) {
                 vec.push_back(it.pos());
                 sum += m.get(it.pos());
@@ -103,12 +102,11 @@ private:
         for (auto row=m.szero(); row<m.row_size(); ++row) {
 
             auto min_val = m.vmax();
-            auto range = m.row_range(row);
-            for (auto it=range.begin; it!=range.end; ++it) {
-                min_val = std::min(min_val, *it);
+            for (auto &v : m.row_range(row)) {
+                min_val = std::min(min_val, v);
             }
-            for (auto it=range.begin; it!=range.end; ++it) {
-                *it -= min_val;
+            for (auto &v : m.row_range(row)) {
+                v -= min_val;
             }
         }
     }
@@ -120,11 +118,10 @@ private:
         for (auto col=m.szero(); col<m.col_size(); ++col) {
 
             auto min_val = m.vmax();
-            auto range = m.col_range(col);
-            for (auto it=range.begin; it!=range.end; ++it) {
+            for (auto it=m.col_range(col); it; ++it) {
                 min_val = std::min(min_val, *it);
             }
-            for (auto it=range.begin; it!=range.end; ++it) {
+            for (auto it=m.col_range(col); it; ++it) {
                 *it -= min_val;
             }
         }
@@ -150,8 +147,7 @@ private:
     //找到此行 的 star 标记
     bool star_in_row(int row, int &col) const
     {
-        auto range = mask_matrix.row_range(row);
-        for (auto it=range.begin; it!=range.end; ++it) {
+        for (auto it=mask_matrix.row_range(row); it; ++it) {
             if (*it == STAR) {
                 col = it.pos().col();
                 return true;
@@ -211,8 +207,7 @@ private:
     {
         int covercount = 0;
 
-        auto range = mask_matrix.range();
-        for (auto it=range.begin; it!=range.end; ++it) {
+        for (auto it=mask_matrix.range(); it; ++it) {
             if (STAR == *it) {
                 col_mask[it.pos().col()] = true;
                 ++covercount;

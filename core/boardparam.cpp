@@ -8,8 +8,7 @@ void BoardParam::set_matrix(const ElementsMatrix &m)
     m_goals.clear();
     box_index.clear();
 
-    auto range = m.range();
-    for (auto it=range.begin; it!=range.end; ++it) {
+    for (auto it=m.range(); it; ++it) {
         Pos p = it.pos();
         auto e = *it;
         switch (e) {

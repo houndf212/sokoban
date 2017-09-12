@@ -62,8 +62,7 @@ IntMatrix hunalg(const IntMatrix &m)
 int check_min(const IntMatrix& m, const IntMatrix &mask)
 {
     int sum=0;
-    auto range = mask.range();
-    for (auto it=range.begin; it!=range.end; ++it) {
+    for (auto it=mask.range(); it; ++it) {
         if (*it == 1)
             sum += m.get(it.pos());
     }
