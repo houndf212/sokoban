@@ -4,6 +4,7 @@
 #include <limits>
 #include <assert.h>
 #include "basic_pos.h"
+#include "basic_matrix_iterator.h"
 
 template<typename T, typename S>
 class Basic_Resize_Matrix
@@ -82,78 +83,27 @@ private:
     std::vector<std::vector<value_type>> m;
 
 private:
-    //简单实现一个迭代器
-    class iterator
-    {
-        typedef value_type& reference;
-        friend class Basic_Resize_Matrix;
-        iterator(Basic_Resize_Matrix *m, size_type row, size_type col)
-            :matrix(m), p(row, col)
-        {}
-    public:
-        Basic_Pos<size_type> pos() const
-        {
-            return p;
-        }
+    //迭代器
+    friend class Basic_Matrix_Iterator<Basic_Resize_Matrix, value_type&>;
+    typedef Basic_Matrix_Iterator<Basic_Resize_Matrix, value_type&> iterator;
 
-        reference operator*() const
-        {
-            return matrix->m[p.row()][p.col()];
-        }
+    friend class Basic_Matrix_Iterator<const Basic_Resize_Matrix, const value_type&>;
+    typedef Basic_Matrix_Iterator<const Basic_Resize_Matrix, const value_type&> const_iterator;
 
-        iterator& operator++()
-        {
-            p.col()++;
-            p.row() += p.col() / matrix->col_size();
-            p.col() %= matrix->col_size();
-            return *this;
-        }
+    //行迭代器
+    friend class Basic_Matrix_Row_Iterator<Basic_Resize_Matrix, value_type&>;
+    typedef Basic_Matrix_Row_Iterator<Basic_Resize_Matrix, value_type&> row_iterator;
 
-        bool operator !=(const iterator &right) const
-        {
-            assert(matrix == right.matrix);
-            return  p != right.p;
-        }
-    private:
-        Basic_Resize_Matrix *matrix;
-        Basic_Pos<size_type> p;
-    };
+    friend class Basic_Matrix_Row_Iterator<const Basic_Resize_Matrix, const value_type&>;
+    typedef Basic_Matrix_Row_Iterator<const Basic_Resize_Matrix, const value_type&> const_row_iterator;
 
-    class const_iterator
-    {
-        typedef const value_type& reference;
-        friend class Basic_Resize_Matrix;
-        const_iterator(const Basic_Resize_Matrix *m, size_type row, size_type col)
-            :matrix(m), p(row, col)
-        {}
-    public:
-        Basic_Pos<size_type> pos() const
-        {
-            return p;
-        }
+    //列迭代器
+    friend class Basic_Matrix_Col_Iterator<Basic_Resize_Matrix, value_type&>;
+    typedef Basic_Matrix_Col_Iterator<Basic_Resize_Matrix, value_type&> col_iterator;
 
-        reference operator*() const
-        {
-            return matrix->m[p.row()][p.col()];
-        }
+    friend class Basic_Matrix_Col_Iterator<const Basic_Resize_Matrix, const value_type&>;
+    typedef Basic_Matrix_Col_Iterator<const Basic_Resize_Matrix, const value_type&> const_col_iterator;
 
-        const_iterator& operator++()
-        {
-            p.col()++;
-            p.row() += p.col() / matrix->col_size();
-            p.col() %= matrix->col_size();
-            return *this;
-        }
-
-        bool operator !=(const const_iterator &right) const
-        {
-            assert(matrix == right.matrix);
-            return  p != right.p;
-        }
-    private:
-        const Basic_Resize_Matrix *matrix;
-        Basic_Pos<size_type> p;
-    };
 public:
     std::pair<iterator, iterator> range()
     {
@@ -172,6 +122,36 @@ public:
 
     const_iterator begin() const { return const_iterator(this, 0, 0); }
     const_iterator end() const { return const_iterator(this, row_size(), 0); }
+
+    // row range
+    std::pair<row_iterator, row_iterator> row_range(size_type row)
+    {
+        assert(row<row_size());
+        return std::make_pair(row_iterator(this, row, 0),
+                              row_iterator(this, row, col_size()));
+    }
+
+    std::pair<const_row_iterator, const_row_iterator> row_range(size_type row) const
+    {
+        assert(row<row_size());
+        return std::make_pair(const_row_iterator(this, row, 0),
+                              const_row_iterator(this, row, col_size()));
+    }
+
+    //col range
+    std::pair<col_iterator, col_iterator> col_range(size_type col)
+    {
+        assert(col<col_size());
+        return std::make_pair(col_iterator(this, 0, col),
+                              col_iterator(this, row_size(), col));
+    }
+
+    std::pair<const_col_iterator, const_col_iterator> col_range(size_type col) const
+    {
+        assert(col<col_size());
+        return std::make_pair(const_col_iterator(this, 0, col),
+                              const_col_iterator(this, row_size(), col));
+    }
 };
 
 template<typename T, typename S>

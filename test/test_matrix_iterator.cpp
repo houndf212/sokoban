@@ -33,6 +33,43 @@ void test_for_get(const IntMatrix &mat)
         qDebug() << v;
     }
 }
+
+void test_row_set(IntMatrix &mat)
+{
+    int n=100;
+    auto range = mat.row_range(0);
+    for (auto it=range.first; it!=range.second; ++it) {
+        *it = n;
+        n+=100;
+    }
+}
+
+void test_row_get(const IntMatrix &mat)
+{
+    auto range = mat.row_range(0);
+    for (auto it=range.first; it!=range.second; ++it) {
+        qDebug() << *it;
+    }
+}
+
+void test_col_set(IntMatrix &mat)
+{
+    int n=1000;
+    auto range = mat.col_range(1);
+    for (auto it=range.first; it!=range.second; ++it) {
+        *it = n;
+        n+=1000;
+    }
+}
+
+void test_col_get(const IntMatrix &mat)
+{
+    auto range = mat.col_range(1);
+    for (auto it=range.first; it!=range.second; ++it) {
+        qDebug() << *it;
+    }
+}
+
 void test_matrix_iterator()
 {
     IntMatrix mat;
@@ -45,4 +82,13 @@ void test_matrix_iterator()
     test_for_set(mat);
     print(mat);
     test_for_get(mat);
+
+    test_row_set(mat);
+    print(mat);
+    test_row_get(mat);
+
+    test_col_set(mat);
+    print(mat);
+    test_col_get(mat);
+
 }

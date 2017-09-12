@@ -8,7 +8,8 @@ HEADERS += \
     $$PWD/movedirection.h \
     $$PWD/movelist.h \
     $$PWD/types.h \
-    $$PWD/xsb.h
+    $$PWD/xsb.h \
+    $$PWD/basic_matrix_iterator.h
 
 SOURCES += \
     $$PWD/boardparam.cpp \
