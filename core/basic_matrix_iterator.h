@@ -47,7 +47,7 @@ public:
 
     reference operator*() const
     {
-        return position.matrix->m[position.pos.row()][position.pos.col()];
+        return position.matrix->iter_ref(position.pos);
     }
 
     Basic_Matrix_Iterator& operator++()
@@ -80,7 +80,7 @@ public:
 
     reference operator*() const
     {
-        return position.matrix->m[position.pos.row()][position.pos.col()];
+        return position.matrix->iter_ref(position.pos);
     }
 
     bool operator !=(const Basic_Matrix_Row_Iterator &right) const
@@ -116,7 +116,7 @@ public:
 
     reference operator*() const
     {
-        return position.matrix->m[position.pos.row()][position.pos.col()];
+        return position.matrix->iter_ref(position.pos);
     }
 
     bool operator !=(const Basic_Matrix_Col_Iterator &right) const
@@ -138,7 +138,8 @@ class IteratorRange
 {
 
 public:
-    IteratorRange(const T &a, const T& b) : m_begin(a), m_end(b)
+    IteratorRange(const T &a, const T& b)
+        : m_begin(a), m_end(b)
     {}
     Basic_Pos<typename T::size_type> pos() const
     {
@@ -175,6 +176,7 @@ public:
         return *m_begin;
     }
 
+    //为了 实现 for (auto &v : m.range([0]));
     T begin() const { return m_begin; }
     T end() const { return m_end; }
 

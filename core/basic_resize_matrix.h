@@ -22,7 +22,7 @@ public:
         n_col = col;
 
         std::vector<value_type> vec(n_col, value_type());
-        m = std::vector<std::vector<value_type>>(row, vec);
+        mat = std::vector<std::vector<value_type>>(row, vec);
     }
 
     void resize(const std::pair<size_type, size_type> &p)
@@ -32,7 +32,7 @@ public:
 
     void fill(value_type val)
     {
-        for (auto &vec : m) {
+        for (auto &vec : mat) {
             std::fill(std::begin(vec), std::end(vec), val);
         }
     }
@@ -41,14 +41,14 @@ public:
     value_type get(Basic_Pos<U> p) const
     {
         assert(isInMatrix(p));
-        return m[p.row()][p.col()];
+        return mat[p.row()][p.col()];
     }
 
     template<typename U>
     void set(Basic_Pos<U> p, value_type val)
     {
         assert(isInMatrix(p));
-        m[p.row()][p.col()] = val;
+        mat[p.row()][p.col()] = val;
     }
 
     template<typename U>
@@ -68,21 +68,32 @@ public:
     bool equal(const Basic_Resize_Matrix& bm) const
     {
         assert(size()==bm.size());
-        return m == bm.m;
+        return mat == bm.mat;
     }
 
     bool less(const Basic_Resize_Matrix& bm) const
     {
         assert(size()==bm.size());
-        return m < bm.m;
+        return mat < bm.mat;
     }
 
 private:
     size_type n_row;
     size_type n_col;
-    std::vector<std::vector<value_type>> m;
+    std::vector<std::vector<value_type>> mat;
 
 private:
+    value_type &iter_ref(const Basic_Pos<size_type> &p)
+    {
+        assert(isInMatrix(p));
+        return mat[p.row()][p.col()];
+    }
+
+    const value_type &iter_ref(const Basic_Pos<size_type> &p) const
+    {
+        assert(isInMatrix(p));
+        return mat[p.row()][p.col()];
+    }
     //迭代器
     friend class Basic_Matrix_Iterator<Basic_Resize_Matrix, value_type&>;
     typedef Basic_Matrix_Iterator<Basic_Resize_Matrix, value_type&> iterator;
@@ -103,7 +114,6 @@ private:
 
     friend class Basic_Matrix_Col_Iterator<const Basic_Resize_Matrix, const value_type&>;
     typedef Basic_Matrix_Col_Iterator<const Basic_Resize_Matrix, const value_type&> const_col_iterator;
-
 public:
     IteratorRange<iterator> range()
     {
