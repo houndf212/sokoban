@@ -138,10 +138,21 @@ class IteratorRange
 {
 
 public:
-    IteratorRange(const T &a, const T& b) : m_begin(a), m_end(b) {}
+    IteratorRange(const T &a, const T& b) : m_begin(a), m_end(b)
+    {}
     Basic_Pos<typename T::size_type> pos() const
     {
         return m_begin.pos();
+    }
+
+    typename T::size_type row() const
+    {
+        return  m_begin.pos().row();
+    }
+
+    typename T::size_type col() const
+    {
+        return  m_begin.pos().col();
     }
 
     operator bool() const

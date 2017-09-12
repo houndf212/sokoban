@@ -102,7 +102,7 @@ private:
         for (auto row=m.szero(); row<m.row_size(); ++row) {
 
             auto min_val = m.vmax();
-            for (auto &v : m.row_range(row)) {
+            for (const auto &v : m.row_range(row)) {
                 min_val = std::min(min_val, v);
             }
             for (auto &v : m.row_range(row)) {
@@ -118,11 +118,11 @@ private:
         for (auto col=m.szero(); col<m.col_size(); ++col) {
 
             auto min_val = m.vmax();
-            for (auto it=m.col_range(col); it; ++it) {
-                min_val = std::min(min_val, *it);
+            for (const auto &v : m.col_range(col)) {
+                min_val = std::min(min_val, v);
             }
-            for (auto it=m.col_range(col); it; ++it) {
-                *it -= min_val;
+            for (auto &v : m.col_range(col)) {
+                v -= min_val;
             }
         }
     }
@@ -149,7 +149,7 @@ private:
     {
         for (auto it=mask_matrix.row_range(row); it; ++it) {
             if (*it == STAR) {
-                col = it.pos().col();
+                col = it.col();
                 return true;
             }
         }
@@ -209,7 +209,7 @@ private:
 
         for (auto it=mask_matrix.range(); it; ++it) {
             if (STAR == *it) {
-                col_mask[it.pos().col()] = true;
+                col_mask[it.col()] = true;
                 ++covercount;
             }
         }

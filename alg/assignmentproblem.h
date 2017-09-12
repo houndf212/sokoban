@@ -13,7 +13,7 @@ enumeration_method(const IntMatrix &m)
     typedef std::vector<IntMatrix::size_type> ColVec;
     ColVec arr;
     arr.resize(m.row_size());
-    std::iota(begin(arr), end(arr), m.szero());
+    std::iota(begin(arr), end(arr), IntMatrix::size_type(0));
 
     auto func = [](const IntMatrix &m, const ColVec &vec) {
         weight_t w = 0;

@@ -14,7 +14,7 @@ MatrixGraph::MatrixGraph(const ElementsMatrix &m)
     matrix.resize(m.size());
     matrix.unmask_all();
 
-    for (auto it = m.range(); it; it.next()) {
+    for (auto it=m.range(); it; ++it) {
         //mask表示可行路径
         if (*it == Elements::floor)
             matrix.mask(it.pos());
