@@ -126,4 +126,11 @@ private:
     Basic_Position<M> position;
 };
 
+template <typename T>
+struct IteratorRange
+{
+    const T begin;
+    const T end;
+};
+
 #endif // BASIC_MATRIX_ITERATOR_H

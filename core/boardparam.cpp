@@ -9,7 +9,7 @@ void BoardParam::set_matrix(const ElementsMatrix &m)
     box_index.clear();
 
     auto range = m.range();
-    for (auto it=range.first; it!=range.second; ++it) {
+    for (auto it=range.begin; it!=range.end; ++it) {
         Pos p = it.pos();
         auto e = *it;
         switch (e) {

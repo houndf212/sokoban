@@ -10,7 +10,7 @@ RoomSlice::RoomSlice(const BoardParam &pa)
 
     IntMatrix::value_type g = 1;
     auto range = matrix.range();
-    for (auto it=range.first; it!=range.second; ++it) {
+    for (auto it=range.begin; it!=range.end; ++it) {
         Pos p = it.pos();
         if (slice.get(p) != k_unflagged)
             continue;

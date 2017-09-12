@@ -81,7 +81,7 @@ private:
         T sum = 0;
 
         auto range = mask.range();
-        for (auto it=range.first; it!=range.second; ++it) {
+        for (auto it=range.begin; it!=range.end; ++it) {
             if (*it == STAR) {
                 vec.push_back(it.pos());
                 sum += m.get(it.pos());
@@ -103,13 +103,12 @@ private:
         for (auto row=m.szero(); row<m.row_size(); ++row) {
 
             auto min_val = m.vmax();
-            for (auto col=m.szero(); col<m.col_size(); ++col) {
-                min_val = std::min(min_val, m.get(Pos(row, col)));
+            auto range = m.row_range(row);
+            for (auto it=range.begin; it!=range.end; ++it) {
+                min_val = std::min(min_val, *it);
             }
-
-            for (auto col=m.szero(); col<m.col_size(); ++col) {
-                Pos p(row, col);
-                m.set(p, m.get(p)-min_val);
+            for (auto it=range.begin; it!=range.end; ++it) {
+                *it -= min_val;
             }
         }
     }
@@ -121,13 +120,12 @@ private:
         for (auto col=m.szero(); col<m.col_size(); ++col) {
 
             auto min_val = m.vmax();
-            for (auto row=m.szero(); row<m.row_size(); ++row) {
-                min_val = std::min(min_val, m.get(Pos(row, col)));
+            auto range = m.col_range(col);
+            for (auto it=range.begin; it!=range.end; ++it) {
+                min_val = std::min(min_val, *it);
             }
-
-            for (auto row=m.szero(); row<m.row_size(); ++row) {
-                Pos p(row, col);
-                m.set(p, m.get(p)-min_val);
+            for (auto it=range.begin; it!=range.end; ++it) {
+                *it -= min_val;
             }
         }
     }
@@ -152,8 +150,10 @@ private:
     //找到此行 的 star 标记
     bool star_in_row(int row, int &col) const
     {
-        for (col=mask_matrix.szero(); col<mask_matrix.col_size(); ++col) {
-            if (mask_matrix.get(Pos(row, col)) == STAR) {
+        auto range = mask_matrix.row_range(row);
+        for (auto it=range.begin; it!=range.end; ++it) {
+            if (*it == STAR) {
+                col = it.pos().col();
                 return true;
             }
         }
@@ -212,7 +212,7 @@ private:
         int covercount = 0;
 
         auto range = mask_matrix.range();
-        for (auto it=range.first; it!=range.second; ++it) {
+        for (auto it=range.begin; it!=range.end; ++it) {
             if (STAR == *it) {
                 col_mask[it.pos().col()] = true;
                 ++covercount;

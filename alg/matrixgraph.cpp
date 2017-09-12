@@ -15,7 +15,7 @@ MatrixGraph::MatrixGraph(const ElementsMatrix &m)
     matrix.unmask_all();
 
     auto range = m.range();
-    for (auto it=range.first; it!=range.second; ++it) {
+    for (auto it=range.begin; it!=range.end; ++it) {
         //mask表示可行路径
         if (*it == Elements::floor)
             matrix.mask(it.pos());

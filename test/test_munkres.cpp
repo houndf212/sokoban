@@ -63,7 +63,7 @@ int check_min(const IntMatrix& m, const IntMatrix &mask)
 {
     int sum=0;
     auto range = mask.range();
-    for (auto it=range.first; it!=range.second; ++it) {
+    for (auto it=range.begin; it!=range.end; ++it) {
         if (*it == 1)
             sum += m.get(it.pos());
     }
@@ -95,6 +95,7 @@ void test_hunalg_and_munkres()
         print(mat);
         print(ret1);
         print(ret2);
+        assert(false);
     }
 }
 

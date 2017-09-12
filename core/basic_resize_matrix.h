@@ -105,16 +105,16 @@ private:
     typedef Basic_Matrix_Col_Iterator<const Basic_Resize_Matrix, const value_type&> const_col_iterator;
 
 public:
-    std::pair<iterator, iterator> range()
+    IteratorRange<iterator> range()
     {
-        return std::make_pair(iterator(this, 0, 0),
-                              iterator(this, row_size(), 0));
+        return { iterator(this, 0, 0),
+                    iterator(this, row_size(), 0)};
     }
 
-    std::pair<const_iterator, const_iterator> range() const
+    IteratorRange<const_iterator> range() const
     {
-        return std::make_pair(const_iterator(this, 0, 0),
-                              const_iterator(this, row_size(), 0));
+        return { const_iterator(this, 0, 0),
+                    const_iterator(this, row_size(), 0)};
     }
 
     iterator begin() { return iterator(this, 0, 0); }
@@ -124,33 +124,33 @@ public:
     const_iterator end() const { return const_iterator(this, row_size(), 0); }
 
     // row range
-    std::pair<row_iterator, row_iterator> row_range(size_type row)
+    IteratorRange<row_iterator> row_range(size_type row)
     {
         assert(row<row_size());
-        return std::make_pair(row_iterator(this, row, 0),
-                              row_iterator(this, row, col_size()));
+        return {row_iterator(this, row, 0),
+                    row_iterator(this, row, col_size())};
     }
 
-    std::pair<const_row_iterator, const_row_iterator> row_range(size_type row) const
+    IteratorRange<const_row_iterator> row_range(size_type row) const
     {
         assert(row<row_size());
-        return std::make_pair(const_row_iterator(this, row, 0),
-                              const_row_iterator(this, row, col_size()));
+        return {const_row_iterator(this, row, 0),
+                    const_row_iterator(this, row, col_size())};
     }
 
     //col range
-    std::pair<col_iterator, col_iterator> col_range(size_type col)
+    IteratorRange<col_iterator> col_range(size_type col)
     {
         assert(col<col_size());
-        return std::make_pair(col_iterator(this, 0, col),
-                              col_iterator(this, row_size(), col));
+        return {col_iterator(this, 0, col),
+                    col_iterator(this, row_size(), col)};
     }
 
-    std::pair<const_col_iterator, const_col_iterator> col_range(size_type col) const
+    IteratorRange<const_col_iterator> col_range(size_type col) const
     {
         assert(col<col_size());
-        return std::make_pair(const_col_iterator(this, 0, col),
-                              const_col_iterator(this, row_size(), col));
+        return {const_col_iterator(this, 0, col),
+                    const_col_iterator(this, row_size(), col)};
     }
 };
 

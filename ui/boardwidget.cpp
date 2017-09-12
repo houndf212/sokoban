@@ -45,7 +45,7 @@ void BoardWidget::createPixBuffer()
 
     QPainter painter(&buffer_pix);
     auto range = matrix.range();
-    for (auto it=range.first; it!=range.second; ++it) {
+    for (auto it=range.begin; it!=range.end; ++it) {
         QPixmap pix = image.get_image(*it);
         painter.drawPixmap(k_width*it.pos().col(),
                            k_height*it.pos().row(),
