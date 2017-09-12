@@ -15,7 +15,7 @@ void test()
     extern void test_munkres();
     extern void test_HungarianAlg();
     extern void test_matrix_iterator();
-    test_munkres();
+//    test_munkres();
 }
 
 int main(int argc, char *argv[])
