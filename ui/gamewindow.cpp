@@ -33,7 +33,7 @@ GameWindow::GameWindow()
 void GameWindow::initShortcut()
 {
     {
-        QAction *act = new QAction;
+        QAction *act = new QAction(this);
         connect(act, &QAction::triggered,
                 [this](){ human_move(Direction::up);});
         act->setShortcut(Qt::Key_Up);
@@ -41,7 +41,7 @@ void GameWindow::initShortcut()
     }
 
     {
-        QAction *act = new QAction;
+        QAction *act = new QAction(this);
         connect(act, &QAction::triggered,
                 [this](){human_move(Direction::down);});
         act->setShortcut(Qt::Key_Down);
@@ -49,7 +49,7 @@ void GameWindow::initShortcut()
     }
 
     {
-        QAction *act = new QAction;
+        QAction *act = new QAction(this);
         connect(act, &QAction::triggered,
                 [this](){human_move(Direction::left);});
         act->setShortcut(Qt::Key_Left);
@@ -57,7 +57,7 @@ void GameWindow::initShortcut()
     }
 
     {
-        QAction *act = new QAction;
+        QAction *act = new QAction(this);
         connect(act, &QAction::triggered,
                 [this](){human_move(Direction::right);});
         act->setShortcut(Qt::Key_Right);

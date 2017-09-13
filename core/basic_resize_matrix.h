@@ -117,14 +117,12 @@ private:
 public:
     IteratorRange<iterator> range()
     {
-        return { iterator(this, 0, 0),
-                    iterator(this, row_size(), 0)};
+        return {begin(), end()};
     }
 
     IteratorRange<const_iterator> range() const
     {
-        return { const_iterator(this, 0, 0),
-                    const_iterator(this, row_size(), 0)};
+        return {begin(), end()};
     }
 
     iterator begin() { return iterator(this, 0, 0); }

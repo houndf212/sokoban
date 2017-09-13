@@ -14,7 +14,7 @@ public:
 
     const Pos &man() const { return man_pos; }
 
-    type_size goals_size() const { return m_goals.size(); }
+    size_t goals_size() const { return m_goals.size(); }
     const PosVector &goals() const { return m_goals; }
     const PosVector &boxes() const { return box_index; }
 

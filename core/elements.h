@@ -16,7 +16,7 @@ enum class Elements : Elements_t
 };
 
 template<Elements e>
-constexpr Elements_t toInt()
+constexpr Elements_t EtoInt()
 {
     return static_cast<Elements_t>(e);
 }
@@ -24,11 +24,11 @@ constexpr Elements_t toInt()
 inline Elements add_goal(Elements e)
 {
     assert(e != Elements::wall);
-    static_assert((toInt<Elements::man>()|toInt<Elements::goal>()) == toInt<Elements::man_goal>(),"");
-    static_assert((toInt<Elements::box>()|toInt<Elements::goal>()) == toInt<Elements::box_goal>(),"");
-    static_assert((toInt<Elements::wall>()|toInt<Elements::goal>()) == toInt<Elements::goal>(),"");
-    static_assert((toInt<Elements::floor>()|toInt<Elements::goal>()) == toInt<Elements::goal>(),"");
-    return Elements(Elements_t(e)|toInt<Elements::goal>());
+    static_assert((EtoInt<Elements::man>()|EtoInt<Elements::goal>()) == EtoInt<Elements::man_goal>(),"");
+    static_assert((EtoInt<Elements::box>()|EtoInt<Elements::goal>()) == EtoInt<Elements::box_goal>(),"");
+    static_assert((EtoInt<Elements::wall>()|EtoInt<Elements::goal>()) == EtoInt<Elements::goal>(),"");
+    static_assert((EtoInt<Elements::floor>()|EtoInt<Elements::goal>()) == EtoInt<Elements::goal>(),"");
+    return Elements(Elements_t(e)|EtoInt<Elements::goal>());
 }
 
 #endif // ELEMENTS_H

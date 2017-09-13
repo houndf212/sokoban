@@ -365,6 +365,7 @@ public:
     static std::pair<VertexList, distance_t>
     AStart_path(const G &g, vertex_t start, vertex_t finish)
     {
+        Q_UNUSED(g);
         VertexMap came_from;
         DistanceMap cost_so_far;
         DistanceMap heuristic_cost;

@@ -49,7 +49,7 @@ BoardGraph::distance_t BoardGraph::heuristic(const BoardGraph::vertex_t &v1, con
     assert(v2.is_done());
     Q_UNUSED(v2);
 
-    const auto size = v1.goals_size();
+    const auto size = static_cast<type_size>(v1.goals_size());
     IntMatrix m;
     m.resize(size, size);
 
