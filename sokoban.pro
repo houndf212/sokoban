@@ -37,6 +37,7 @@ include(test/test.pri)
 PRECOMPILED_HEADER = pch.h
 
 HEADERS += \
+    pch.h \
     debug_print.h
 
 SOURCES += \
