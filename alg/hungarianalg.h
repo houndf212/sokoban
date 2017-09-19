@@ -142,7 +142,7 @@ private:
     bool star_in_row(int row, int &col) const
     {
         auto range = mask_matrix.row_range(row);
-        auto it = std::find(range.begin(), range.end(), STAR);
+        auto it = std::find(range.begin(), range.end(), T(STAR));
         if (it == range.end()) {
             return false;
         }
