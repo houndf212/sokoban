@@ -26,10 +26,8 @@ public:
         return Manhattan_Distance(v1, v2);
     }
 
-    static distance_t distance(vertex_t v1, vertex_t v2)
+    static constexpr distance_t distance(vertex_t , vertex_t )
     {
-        Q_UNUSED(v1);
-        Q_UNUSED(v2);
         return 1;
     }
 

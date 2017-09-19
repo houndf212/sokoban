@@ -12,7 +12,7 @@ size_t BoardGraph::BoardHash::operator()(const BoardParam &param) const
     std::string str;
     str.reserve(m.row_size()*m.col_size());
 
-    for( auto &v : m) {
+    for(const auto &v : m) {
         str.push_back(static_cast<char>(v));
     }
     return std::hash<std::string>()(str);

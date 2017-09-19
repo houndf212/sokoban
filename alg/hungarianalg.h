@@ -100,13 +100,10 @@ private:
         assert(m.row_size()>=2 && m.col_size()>=2);
 
         for (auto row=m.szero(); row<m.row_size(); ++row) {
-
-            auto min_val = m.vmax();
-            for (const auto &v : m.row_range(row)) {
-                min_val = std::min(min_val, v);
-            }
-            for (auto &v : m.row_range(row)) {
-                v -= min_val;
+            auto range = m.row_range(row);
+            auto min_iter = std::min_element(range.begin(), range.end());
+            for (auto &v : range) {
+                v -= *min_iter;
             }
         }
     }
@@ -116,13 +113,10 @@ private:
         assert(m.row_size()>=2 && m.col_size()>=2);
 
         for (auto col=m.szero(); col<m.col_size(); ++col) {
-
-            auto min_val = m.vmax();
-            for (const auto &v : m.col_range(col)) {
-                min_val = std::min(min_val, v);
-            }
-            for (auto &v : m.col_range(col)) {
-                v -= min_val;
+            auto range = m.col_range(col);
+            auto min_iter = std::min_element(range.begin(), range.end());
+            for (auto &v : range) {
+                v -= *min_iter;
             }
         }
     }

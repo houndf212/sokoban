@@ -13,10 +13,16 @@ public:
         :matrix(m), pos(row, col)
     {}
 
-    bool operator !=(const Basic_Position &right) const
+    bool operator != (const Basic_Position &right) const
     {
         assert(matrix == right.matrix);
         return  pos != right.pos;
+    }
+
+    bool operator == (const Basic_Position &right) const
+    {
+        assert(matrix == right.matrix);
+        return  pos == right.pos;
     }
 
     M* matrix;
@@ -40,9 +46,14 @@ public:
         return position.pos;
     }
 
-    bool operator !=(const Basic_Matrix_Iterator &right) const
+    bool operator != (const Basic_Matrix_Iterator &right) const
     {
         return  position != right.position;
+    }
+
+    bool operator == (const Basic_Matrix_Iterator &right) const
+    {
+        return  position == right.position;
     }
 
     reference operator*() const
@@ -83,9 +94,14 @@ public:
         return position.matrix->iter_ref(position.pos);
     }
 
-    bool operator !=(const Basic_Matrix_Row_Iterator &right) const
+    bool operator != (const Basic_Matrix_Row_Iterator &right) const
     {
         return  position != right.position;
+    }
+
+    bool operator == (const Basic_Matrix_Row_Iterator &right) const
+    {
+        return  position == right.position;
     }
 
     Basic_Matrix_Row_Iterator& operator++()
@@ -119,9 +135,14 @@ public:
         return position.matrix->iter_ref(position.pos);
     }
 
-    bool operator !=(const Basic_Matrix_Col_Iterator &right) const
+    bool operator != (const Basic_Matrix_Col_Iterator &right) const
     {
         return  position != right.position;
+    }
+
+    bool operator == (const Basic_Matrix_Col_Iterator &right) const
+    {
+        return  position == right.position;
     }
 
     Basic_Matrix_Col_Iterator& operator++()
