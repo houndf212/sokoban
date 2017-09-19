@@ -4,6 +4,13 @@
 #include "boardparam.h"
 #include "gamewindow.h"
 
+bool check()
+{
+    extern bool check_matrix_iterator();
+    assert(check_matrix_iterator());
+    return true;
+}
+
 void test()
 {
     extern void test_print();
@@ -15,11 +22,13 @@ void test()
     extern void test_munkres();
     extern void test_HungarianAlg();
     extern void test_matrix_iterator();
+
 //    test_matrix_iterator();
 }
 
 int main(int argc, char *argv[])
 {
+    assert(check());
 //    test();
 //    return 0;
     QApplication a(argc, argv);

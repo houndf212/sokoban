@@ -31,6 +31,7 @@ include(ui/ui.pri)
 include(games/games.pri)
 
 Debug{
+include(check/check.pri)
 include(test/test.pri)
 }
 
