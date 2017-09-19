@@ -1,6 +1,7 @@
 ﻿#ifndef BASIC_MATRIX_ITERATOR_H
 #define BASIC_MATRIX_ITERATOR_H
 #include "basic_pos.h"
+#include <iterator>
 
 template<typename M>
 class Basic_Position
@@ -29,11 +30,11 @@ public:
     Basic_Pos<size_type> pos;
 };
 
-template<class M, class reference>
+template<class M, class R>
 class Basic_Matrix_Iterator
 {
 public:
-    typedef reference reference_type;
+    typedef R reference;
     typedef typename M::value_type value_type;
     typedef typename M::size_type size_type;
 
@@ -72,12 +73,15 @@ private:
     Basic_Position<M> position;
 };
 
-template<class M, class reference>
+template<class M, class R>
 class Basic_Matrix_Row_Iterator
 {
 public:
-    typedef reference reference_type;
+    typedef typename M::size_type difference_type;
     typedef typename M::value_type value_type;
+    typedef R reference;
+    typedef value_type* pointer;
+    typedef std::forward_iterator_tag iterator_category;
     typedef typename M::size_type size_type;
 
     Basic_Matrix_Row_Iterator(M *m, size_type row, size_type col)
@@ -113,11 +117,11 @@ private:
     Basic_Position<M> position;
 };
 
-template<class M, class reference>
+template<class M, class R>
 class Basic_Matrix_Col_Iterator
 {
 public:
-    typedef reference reference_type;
+    typedef R reference;
     typedef typename M::value_type value_type;
     typedef typename M::size_type size_type;
 
@@ -192,7 +196,7 @@ public:
         ++m_begin;
     }
 
-    typename T::reference_type operator *() const
+    typename T::reference operator *() const
     {
         return *m_begin;
     }

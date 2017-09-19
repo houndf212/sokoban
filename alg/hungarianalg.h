@@ -141,13 +141,16 @@ private:
     //找到此行 的 star 标记
     bool star_in_row(int row, int &col) const
     {
-        for (auto it=mask_matrix.row_range(row); it; ++it) {
-            if (*it == STAR) {
-                col = it.col();
-                return true;
-            }
+        auto range = mask_matrix.row_range(row);
+        auto it = std::find(range.begin(), range.end(), STAR);
+        if (it == range.end()) {
+            return false;
         }
-        return false;
+        else {
+            col = it.pos().col();
+            return true;
+        }
+
     }
 
     //找到未被标记的 最小值
