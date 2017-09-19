@@ -34,8 +34,11 @@ template<class M, class R>
 class Basic_Matrix_Iterator
 {
 public:
-    typedef R reference;
+    typedef typename M::size_type difference_type;
     typedef typename M::value_type value_type;
+    typedef R reference;
+    typedef value_type* pointer;
+    typedef std::forward_iterator_tag iterator_category;
     typedef typename M::size_type size_type;
 
     Basic_Matrix_Iterator(M *m, size_type row, size_type col)
@@ -121,8 +124,11 @@ template<class M, class R>
 class Basic_Matrix_Col_Iterator
 {
 public:
-    typedef R reference;
+    typedef typename M::size_type difference_type;
     typedef typename M::value_type value_type;
+    typedef R reference;
+    typedef value_type* pointer;
+    typedef std::forward_iterator_tag iterator_category;
     typedef typename M::size_type size_type;
 
     Basic_Matrix_Col_Iterator(M *m, size_type row, size_type col)
