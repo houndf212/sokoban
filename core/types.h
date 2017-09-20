@@ -22,6 +22,12 @@ typedef Basic_Resize_Matrix<Elements, type_size> ElementsMatrix;
 typedef std::vector<Pos> PosVector;
 typedef std::list<Pos> PosList;
 
+template<class T>
+inline T Manhattan_Distance(const Basic_Pos<T> &p1, const Basic_Pos<T> &p2)
+{
+    return std::abs(p1.row()-p2.row())+std::abs(p1.col()-p2.col());
+}
+
 template <class T>
 Basic_Pos<T> pos_move(const Basic_Pos<T> &from, Direction d)
 {
