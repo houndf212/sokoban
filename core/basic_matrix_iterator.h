@@ -169,9 +169,10 @@ class IteratorRange
 {
 
 public:
-    IteratorRange(const T &a, const T& b)
+    IteratorRange(T &&a, T &&b)
         : m_begin(a), m_end(b)
     {}
+
     Basic_Pos<typename T::size_type> pos() const
     {
         return m_begin.pos();
