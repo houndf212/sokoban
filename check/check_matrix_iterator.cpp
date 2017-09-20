@@ -25,6 +25,29 @@ void check_range_iterator()
     }
 }
 
+void check_range_reverse_iterator()
+{
+    IntMatrix m;
+    m.resize(2, 2);
+
+    int i=1;
+    for (auto &v : m.reverse_range()) {
+        v = i++;
+    }
+
+    assert(m.get(Pos(0, 0)) == 4);
+    assert(m.get(Pos(0, 1)) == 3);
+    assert(m.get(Pos(1, 0)) == 2);
+    assert(m.get(Pos(1, 1)) == 1);
+
+    const IntMatrix &cm = m;
+    i = 1;
+    for (auto &v : cm.reverse_range()) {
+        assert(v == i++);
+    }
+
+}
+
 void check_row_iterator()
 {
     IntMatrix m;
@@ -44,6 +67,31 @@ void check_row_iterator()
     }
     assert(m.get(Pos(1, 0)) == 100);
     assert(m.get(Pos(1, 1)) == 200);
+}
+
+void check_row_reverse_iterator()
+{
+    IntMatrix m;
+    m.resize(2, 2);
+    int i=10;
+    for (auto &v : m.row_reverse_range(0)) {
+        v = i;
+        i+=10;
+    }
+    assert(m.get(Pos(0, 0)) == 20);
+    assert(m.get(Pos(0, 1)) == 10);
+
+    i=100;
+    for (auto &v : m.row_reverse_range(1)) {
+        v = i;
+        i+=100;
+    }
+    i=100;
+    const auto &cm = m;
+    for (auto &v : cm.row_reverse_range(1)) {
+        assert(v==i);
+        i+=100;
+    }
 }
 
 void check_col_iterator()
@@ -67,6 +115,32 @@ void check_col_iterator()
     assert(m.get(Pos(1, 1)) == 200);
 }
 
+void check_col_reverse_iterator()
+{
+    IntMatrix m;
+    m.resize(2, 2);
+    int i=10;
+    for (auto &v : m.col_reverse_range(0)) {
+        v = i;
+        i+=10;
+    }
+    assert(m.get(Pos(0, 0)) == 20);
+    assert(m.get(Pos(1, 0)) == 10);
+
+    i=100;
+    for (auto &v : m.col_reverse_range(1)) {
+        v = i;
+        i+=100;
+    }
+
+    const auto &cm = m;
+    i = 100;
+    for (auto &v : cm.col_reverse_range(1)) {
+        assert(v==i);
+        i+=100;
+    }
+}
+
 void check_range_min_max()
 {
     int n = 100;
@@ -81,7 +155,7 @@ void check_range_min_max()
         std::copy(begin(vec), end(vec), m.begin());
         auto iter_min = std::min_element(m.begin(), m.end());
         assert(*iter_min == n);
-        auto iter_max = std::max_element(m.begin(), m.end());
+        auto iter_max = std::max_element(m.rbegin(), m.rend());
         assert(*iter_max == n+int(vec.size())-1);
     }
 }
@@ -126,14 +200,27 @@ void check_col_min_max()
     }
 }
 
-bool check_matrix_iterator()
+void check_forward_iterator()
 {
-    check_range_iterator();
-    check_row_iterator();
-    check_col_iterator();
-
     check_range_min_max();
     check_row_min_max();
     check_col_min_max();
+}
+
+void check_bidirectional_iterator()
+{
+    check_range_iterator();
+    check_range_reverse_iterator();
+    check_row_iterator();
+    check_row_reverse_iterator();
+    check_col_iterator();
+    check_col_reverse_iterator();
+}
+
+bool check_matrix_iterator()
+{
+    check_bidirectional_iterator();
+    check_forward_iterator();
+
     return true;
 }

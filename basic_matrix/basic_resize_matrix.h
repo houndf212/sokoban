@@ -5,6 +5,9 @@
 #include <assert.h>
 #include "basic_pos.h"
 #include "basic_matrix_iterator.h"
+#include "basic_matrix_row_iterator.h"
+#include "basic_matrix_col_iterator.h"
+#include "iteratorrange.h"
 
 template<typename T, typename S>
 class Basic_Resize_Matrix
@@ -95,25 +98,35 @@ private:
         return mat[p.row()][p.col()];
     }
     //迭代器
-    friend class Basic_Matrix_Iterator<Basic_Resize_Matrix, value_type&>;
-    typedef Basic_Matrix_Iterator<Basic_Resize_Matrix, value_type&> iterator;
+    friend class Basic_Matrix_Iterator<Basic_Resize_Matrix>;
+    typedef Basic_Matrix_Iterator<Basic_Resize_Matrix> iterator;
 
-    friend class Basic_Matrix_Iterator<const Basic_Resize_Matrix, const value_type&>;
-    typedef Basic_Matrix_Iterator<const Basic_Resize_Matrix, const value_type&> const_iterator;
+    friend class Basic_Matrix_Iterator<const Basic_Resize_Matrix, const value_type>;
+    typedef Basic_Matrix_Iterator<const Basic_Resize_Matrix, const value_type> const_iterator;
+
+    typedef std::reverse_iterator<iterator>            reverse_iterator;
+    typedef std::reverse_iterator<const_iterator>      const_reverse_iterator;
 
     //行迭代器
-    friend class Basic_Matrix_Row_Iterator<Basic_Resize_Matrix, value_type&>;
-    typedef Basic_Matrix_Row_Iterator<Basic_Resize_Matrix, value_type&> row_iterator;
+    friend class Basic_Matrix_Row_Iterator<Basic_Resize_Matrix>;
+    typedef Basic_Matrix_Row_Iterator<Basic_Resize_Matrix> row_iterator;
 
-    friend class Basic_Matrix_Row_Iterator<const Basic_Resize_Matrix, const value_type&>;
-    typedef Basic_Matrix_Row_Iterator<const Basic_Resize_Matrix, const value_type&> const_row_iterator;
+    friend class Basic_Matrix_Row_Iterator<const Basic_Resize_Matrix, const value_type>;
+    typedef Basic_Matrix_Row_Iterator<const Basic_Resize_Matrix, const value_type> const_row_iterator;
+
+    typedef std::reverse_iterator<row_iterator>            row_reverse_iterator;
+    typedef std::reverse_iterator<const_row_iterator>      const_row_reverse_iterator;
 
     //列迭代器
-    friend class Basic_Matrix_Col_Iterator<Basic_Resize_Matrix, value_type&>;
-    typedef Basic_Matrix_Col_Iterator<Basic_Resize_Matrix, value_type&> col_iterator;
+    friend class Basic_Matrix_Col_Iterator<Basic_Resize_Matrix>;
+    typedef Basic_Matrix_Col_Iterator<Basic_Resize_Matrix> col_iterator;
 
-    friend class Basic_Matrix_Col_Iterator<const Basic_Resize_Matrix, const value_type&>;
-    typedef Basic_Matrix_Col_Iterator<const Basic_Resize_Matrix, const value_type&> const_col_iterator;
+    friend class Basic_Matrix_Col_Iterator<const Basic_Resize_Matrix, const value_type>;
+    typedef Basic_Matrix_Col_Iterator<const Basic_Resize_Matrix, const value_type> const_col_iterator;
+
+    typedef std::reverse_iterator<col_iterator>            col_reverse_iterator;
+    typedef std::reverse_iterator<const_col_iterator>      const_col_reverse_iterator;
+
 public:
     IteratorRange<iterator> range()
     {
@@ -125,11 +138,27 @@ public:
         return {begin(), end()};
     }
 
+    IteratorRange<reverse_iterator> reverse_range()
+    {
+        return {rbegin(), rend()};
+    }
+
+    IteratorRange<const_reverse_iterator> reverse_range() const
+    {
+        return {rbegin(), rend()};
+    }
+
     iterator begin() { return iterator(this, 0, 0); }
     iterator end() { return iterator(this, row_size(), 0); }
 
     const_iterator begin() const { return const_iterator(this, 0, 0); }
     const_iterator end() const { return const_iterator(this, row_size(), 0); }
+
+    reverse_iterator rbegin() { return reverse_iterator(end()); }
+    reverse_iterator rend() { return reverse_iterator(begin()); }
+
+    const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
+    const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
 
     // row range
     IteratorRange<row_iterator> row_range(size_type row)
@@ -146,6 +175,21 @@ public:
                     const_row_iterator(this, row, col_size())};
     }
 
+
+    IteratorRange<row_reverse_iterator> row_reverse_range(size_type row)
+    {
+        assert(row<row_size());
+        return {row_reverse_iterator(row_iterator(this, row, col_size())),
+                    row_reverse_iterator(row_iterator(this, row, 0))};
+    }
+
+    IteratorRange<const_row_reverse_iterator> row_reverse_range(size_type row) const
+    {
+        assert(row<row_size());
+        return {const_row_reverse_iterator(const_row_iterator(this, row, col_size())),
+                    const_row_reverse_iterator(const_row_iterator(this, row, 0))};
+    }
+
     //col range
     IteratorRange<col_iterator> col_range(size_type col)
     {
@@ -159,6 +203,20 @@ public:
         assert(col<col_size());
         return {const_col_iterator(this, 0, col),
                     const_col_iterator(this, row_size(), col)};
+    }
+
+    IteratorRange<col_reverse_iterator> col_reverse_range(size_type col)
+    {
+        assert(col<col_size());
+        return {col_reverse_iterator(col_iterator(this,row_size(), col)),
+                    col_reverse_iterator(col_iterator(this, 0, col))};
+    }
+
+    IteratorRange<const_col_reverse_iterator> col_reverse_range(size_type col) const
+    {
+        assert(col<col_size());
+        return {const_col_reverse_iterator(const_col_iterator(this, row_size(), col)),
+                    const_col_reverse_iterator(const_col_iterator(this, 0, col))};
     }
 };
 

@@ -1,5 +1,5 @@
-﻿#ifndef BASIC_MATRIX_ITERATOR_H
-#define BASIC_MATRIX_ITERATOR_H
+﻿#ifndef BASIC_MATRIX_ROW_ITERATOR_H
+#define BASIC_MATRIX_ROW_ITERATOR_H
 
 #include <iterator>
 #include "basic_pos.h"
@@ -7,13 +7,13 @@
 template<class _Matrix,
          class _Value_Type = typename _Matrix::value_type
          >
-class Basic_Matrix_Iterator
+class Basic_Matrix_Row_Iterator
         : public std::iterator
         <std::bidirectional_iterator_tag,
         _Value_Type,
         typename _Matrix::size_type>
 {
-    typedef Basic_Matrix_Iterator<_Matrix, _Value_Type> _Self;
+    typedef Basic_Matrix_Row_Iterator<_Matrix, _Value_Type> _Self;
 public:
     typedef _Matrix Matrix;
     typedef std::iterator
@@ -21,7 +21,7 @@ public:
     _Value_Type,
     typename _Matrix::size_type> Parent;
     typedef typename Matrix::size_type size_type;
-    Basic_Matrix_Iterator(Matrix *m, size_type row, size_type col)
+    Basic_Matrix_Row_Iterator(Matrix *m, size_type row, size_type col)
         :m_matrix(m), m_pos(row, col)
     {}
 
@@ -50,22 +50,12 @@ public:
     _Self &operator++()
     {
         m_pos.col()++;
-        if (m_pos.col() == m_matrix->col_size()) {
-            m_pos.col() = 0;
-            m_pos.row()++;
-        }
         return *this;
     }
 
     _Self &operator--()
     {
-        if (m_pos.col() == 0) {
-            m_pos.col() = m_matrix->col_size()-1;
-            m_pos.row()--;
-        }
-        else {
-            m_pos.col()--;
-        }
+        m_pos.col()--;
         return *this;
     }
 private:
@@ -73,4 +63,4 @@ private:
     Basic_Pos<size_type> m_pos;
 };
 
-#endif // BASIC_MATRIX_ITERATOR_H
+#endif // BASIC_MATRIX_ROW_ITERATOR_H
