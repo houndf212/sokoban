@@ -26,51 +26,6 @@ public:
     {
         return row()<p.row() || (row()==p.row() && col()<p.col());
     }
-
-    Basic_Pos move(Direction d) const
-    {
-        Basic_Pos to = *this;
-        switch (d) {
-        case Direction::up:
-        case Direction::push_up:
-            to.row()--;
-            break;
-        case Direction::down:
-        case Direction::push_down:
-            to.row()++;
-            break;
-        case Direction::left:
-        case Direction::push_left:
-            to.col()--;
-            break;
-        case Direction::right:
-        case Direction::push_right:
-            to.col()++;
-            break;
-        default:
-            assert(false);
-            break;
-        }
-        return to;
-    }
-    Direction to(const Basic_Pos &p) const
-    {
-        if (row() == p.row()) {
-            auto dcol = p.col() - col();
-            if (dcol == 1)
-                return Direction::right;
-            else if (dcol == -1)
-                return Direction::left;
-        }
-        else if (col() == p.col()) {
-            auto drow = p.row() - row();
-            if (drow == 1)
-                return Direction::down;
-            else if (drow == -1)
-                return Direction::up;
-        }
-        return Direction::NotValid;
-    }
 private:
     T m_row;
     T m_col;

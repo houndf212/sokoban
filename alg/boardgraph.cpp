@@ -150,10 +150,10 @@ MoveList BoardGraph::to_movelist(const BoardGraph::vertex_t &v1, const BoardGrap
         }
     }
     assert(box1 != box2);
-    Direction push = box1.to(box2);
+    Direction push = pos_to(box1, box2);
     assert(push!=Direction::NotValid);
     Pos man_from = v1.man();
-    Pos man_to = box1.move(reverse(push));
+    Pos man_to = pos_move(box1, reverse(push));
 
     MoveList mlst;
     if (man_from != man_to) {
@@ -163,7 +163,7 @@ MoveList BoardGraph::to_movelist(const BoardGraph::vertex_t &v1, const BoardGrap
 
         auto path = G::AStart_path(g, man_from, man_to);
         for (auto p : path.first) {
-            auto d = man_from.to(p);
+            auto d = pos_to(man_from, p);
             mlst.check_push(d);
             man_from = p;
         }
@@ -178,7 +178,7 @@ MoveList BoardGraph::to_movelist(const BoardGraph::vertex_t &v1, const BoardGrap
 
         auto path = G::AStart_path(g, man_from, v2.man());
         for (auto p : path.first) {
-            auto d = man_from.to(p);
+            auto d = pos_to(man_from, p);
             mlst.check_push(d);
             man_from = p;
         }

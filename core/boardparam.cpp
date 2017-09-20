@@ -43,7 +43,7 @@ bool BoardParam::man_move(Direction &d)
 {
     assert(d!=Direction::NotValid);
 
-    Pos to = man().move(d);
+    Pos to = pos_move(man(), d);
 
     if (!room().isInMatrix(to))
         return false;
@@ -57,7 +57,7 @@ bool BoardParam::man_move(Direction &d)
         assert(!is_push(d));
         return true;
     case Elements::box: {
-        Pos too = to.move(d);
+        Pos too = pos_move(to, d);
         if (!room().isInMatrix(too))
             return false;
 
@@ -77,7 +77,7 @@ bool BoardParam::man_move(Direction &d)
 
 void BoardParam::box_move(Pos box, Pos to)
 {
-    assert(box.to(to) != Direction::NotValid);
+    assert(pos_to(box, to) != Direction::NotValid);
     assert(room().isInMatrix(box));
     assert(room().isInMatrix(to));
     assert(room().get(box) == Elements::box);
@@ -99,8 +99,8 @@ std::list<BoardParam> BoardParam::next_move() const
 
     auto func = [&](Pos box, Direction d) {
         if (can_box_move(box, d)) {
-            Pos man_to = box.move(reverse(d));
-            Pos to = box.move(d);
+            Pos man_to = pos_move(box, reverse(d));
+            Pos to = pos_move(box, d);
             BoardParam pa = *this;
             //如果需要计算移动步骤，这里人是跳跃移动的
             pa.man_pos = man_to;
@@ -123,12 +123,12 @@ bool BoardParam::can_box_move(Pos box, Direction d) const
 {
     assert(room().isInMatrix(box));
     assert(room().get(box) == Elements::box);
-    Pos to = box.move(d);
+    Pos to = pos_move(box, d);
     if (room().get(to) != Elements::floor) {
         return false;
     }
 
-    Pos man_to = box.move(reverse(d));
+    Pos man_to = pos_move(box, reverse(d));
     if (room().get(man_to) != Elements::floor) {
         return false;
     }

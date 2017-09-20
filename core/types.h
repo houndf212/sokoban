@@ -22,4 +22,51 @@ typedef Basic_Resize_Matrix<Elements, type_size> ElementsMatrix;
 typedef std::vector<Pos> PosVector;
 typedef std::list<Pos> PosList;
 
+template <class T>
+Basic_Pos<T> pos_move(const Basic_Pos<T> &from, Direction d)
+{
+    Basic_Pos<T> to = from;
+    switch (d) {
+    case Direction::up:
+    case Direction::push_up:
+        to.row()--;
+        break;
+    case Direction::down:
+    case Direction::push_down:
+        to.row()++;
+        break;
+    case Direction::left:
+    case Direction::push_left:
+        to.col()--;
+        break;
+    case Direction::right:
+    case Direction::push_right:
+        to.col()++;
+        break;
+    default:
+        assert(false);
+        break;
+    }
+    return to;
+}
+template <class T>
+Direction pos_to(const Basic_Pos<T> &from, const Basic_Pos<T> &to)
+{
+    if (from.row() == to.row()) {
+        auto dcol = to.col() - from.col();
+        if (dcol == 1)
+            return Direction::right;
+        else if (dcol == -1)
+            return Direction::left;
+    }
+    else if (from.col() == to.col()) {
+        auto drow = to.row() - from.row();
+        if (drow == 1)
+            return Direction::down;
+        else if (drow == -1)
+            return Direction::up;
+    }
+    return Direction::NotValid;
+}
+
 #endif // TYPES_H
