@@ -134,7 +134,7 @@ public:
 
     typedef std::reverse_iterator<iterator>            reverse_iterator;
     typedef std::reverse_iterator<const_iterator>      const_reverse_iterator;
-public:
+
     iterator begin() { return {this, 0}; }
     iterator end() { return {this, row_size()*col_size()}; }
 
@@ -152,7 +152,7 @@ public:
 
     IteratorRange<reverse_iterator> reverse_range() { return {rbegin(), rend()}; }
     IteratorRange<const_reverse_iterator> reverse_range() const { return {rbegin(), rend()}; }
-private:
+
     // row iterator, same as range iterator
     typedef iterator row_iterator;
     typedef const_iterator const_row_iterator;
@@ -164,8 +164,7 @@ private:
 
     const_row_iterator row_begin(size_type row) const { return {this, row*col_size()}; }
     const_row_iterator row_end(size_type row) const { return {this, (row+1)*col_size()}; }
-public:
-    // row range
+
     IteratorRange<row_iterator> row_range(size_type row)
     {
         assert(row<row_size());
@@ -189,7 +188,8 @@ public:
         assert(row<row_size());
         return {const_row_reverse_iterator(row_end(row)), const_row_reverse_iterator(row_begin(row))};
     }
-private:
+
+    // col iterator
     typedef Basic_Matrix_Col_Index_Iterator<Basic_Resize_Matrix, value_type> col_iterator;
     typedef Basic_Matrix_Col_Index_Iterator<const Basic_Resize_Matrix, const value_type> const_col_iterator;
     typedef std::reverse_iterator<col_iterator>            col_reverse_iterator;
@@ -200,7 +200,7 @@ private:
 
     const_col_iterator col_begin(size_type col) const { return {this, col}; }
     const_col_iterator col_end(size_type col) const { return {this, row_size()*col_size()+col}; }
-public:
+
     IteratorRange<col_iterator> col_range(size_type col)
     {
         assert(col<col_size());

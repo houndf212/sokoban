@@ -75,12 +75,7 @@ ElementsMatrix XSB::from_file(const char *filestr)
 
     for (auto row=em.szero(); row<row_size; ++row) {
         const auto &line = lst.at(row);
-        for (auto col=em.szero(); col<line.size(); ++col) {
-            Pos p(row, col);
-            char c = line.at(col);
-            auto e = XSB::char_to_e(c);
-            em.set(p, e);
-        }
+        std::transform(line.begin(), line.end(), em.row_begin(row), char_to_e);
     }
     replace_outer_floor(em);
     return remove_outer_wall(em);
@@ -152,80 +147,46 @@ std::string XSB::to_string(const ElementsMatrix &m)
 {
     std::string str;
     for (auto row=m.szero(); row<m.row_size(); ++row) {
-        for (auto col=m.szero(); col<m.col_size(); ++col) {
-            Pos p(row, col);
-            auto e = m.get(p);
-            auto c = e_to_char(e);
-            str.push_back(c);
-        }
+        std::transform(m.row_begin(row), m.row_end(row), std::back_inserter(str), e_to_char);
         str.push_back('\n');
     }
     return str;
 }
 
+template <class R>
+static void test_set_range(const R &range)
+{
+    for (auto &v : range) {
+        if (v != Elements::wall) {
+            //这里说明room不是被墙包裹的
+            assert(v == Elements::floor);
+            v = Elements::wall;
+        }
+        else
+            break;
+    }
+}
 
 void XSB::replace_outer_floor(ElementsMatrix &m)
 {
     //保证所有的room都是被wall包裹的
     //四个方向 从上到下从下倒上，从左到右，从右到左
-
-    auto test_set = [&](Pos p) {
-        assert(m.isInMatrix(p));
-        if (m.get(p) != Elements::wall) {
-            //这里说明room不是被墙包裹的
-            assert(m.get(p) == Elements::floor);
-            m.set(p, Elements::wall);
-            return false;
-        }
-        return true;
-    };
-
     for (auto row=m.szero(); row<m.row_size(); ++row) {
-        //从左到右
-        for (auto col=m.szero(); col<m.col_size(); ++col) {
-            if (test_set(Pos(row, col)))
-                break;
-        }
-        //从右到左
-        for (auto col=m.col_size()-1; col>=m.szero(); --col) {
-            if (test_set(Pos(row, col)))
-                break;
-        }
+        test_set_range(m.row_range(row));
+        test_set_range(m.row_reverse_range(row));
     }
 
     for (auto col=m.szero(); col<m.col_size(); ++col) {
-
-        //从上到下
-        for (auto row=m.szero(); row<m.row_size(); ++row) {
-            if (test_set(Pos(row, col)))
-                break;
-        }
-        //从下到上
-        for (auto row=m.row_size()-1; row>=m.szero(); --row) {
-            if (test_set(Pos(row, col)))
-                break;
-        }
+        test_set_range(m.col_range(col));
+        test_set_range(m.col_reverse_range(col));
     }
 }
 
-static bool is_wall_row(type_size row, const ElementsMatrix &m)
+template <class R>
+static bool is_wall_range(const R &range)
 {
-    assert(row<m.row_size());
-    for (auto col=m.szero(); col<m.col_size(); ++col) {
-        if (m.get(Pos(row, col)) != Elements::wall)
-            return false;
-    }
-    return true;
-}
-
-static bool is_wall_col(type_size col, const ElementsMatrix &m)
-{
-    assert(col<m.col_size());
-    for (auto row=m.szero(); row<m.row_size(); ++row) {
-        if (m.get(Pos(row, col)) != Elements::wall)
-            return false;
-    }
-    return true;
+    auto equal_wall = [](Elements e) { return e == Elements::wall; };
+    return std::all_of(range.begin(), range.end(), equal_wall);
 }
 
 static ElementsMatrix remove_row(type_size row, const ElementsMatrix &m)
@@ -236,11 +197,7 @@ static ElementsMatrix remove_row(type_size row, const ElementsMatrix &m)
     for (auto r=m.szero(); r<m.row_size(); ++r) {
         if (r == row) continue;
         auto r_to = r<row ? r : r-1;
-        for (auto c=m.szero(); c<m.col_size(); ++c) {
-            Pos from(r, c);
-            Pos to(r_to, c);
-            em.set(to, m.get(from));
-        }
+        std::copy(m.row_begin(r), m.row_end(r), em.row_begin(r_to));
     }
     return em;
 }
@@ -253,11 +210,7 @@ static ElementsMatrix remove_col(type_size col, const ElementsMatrix &m)
     for (auto c=m.szero(); c<m.col_size(); ++c) {
         if (c == col) continue;
         auto c_to = c<col ? c : c-1;
-        for (auto r=m.szero(); c<m.row_size(); ++r) {
-            Pos from(r, c);
-            Pos to(r, c_to);
-            em.set(to, m.get(from));
-        }
+        std::copy(m.col_begin(c), m.col_end(c), em.col_begin(c_to));
     }
     return em;
 }
@@ -265,7 +218,7 @@ static ElementsMatrix remove_col(type_size col, const ElementsMatrix &m)
 ElementsMatrix XSB::remove_outer_wall(ElementsMatrix m)
 {
     for (auto row=m.szero(); row<m.row_size()-1;) {
-        if (is_wall_row(row, m) && is_wall_row(row+1, m)) {
+        if (is_wall_range(m.row_range(row)) && is_wall_range(m.row_range(row+1))) {
             m = remove_row(row, m);
         }
         else
@@ -273,7 +226,7 @@ ElementsMatrix XSB::remove_outer_wall(ElementsMatrix m)
     }
 
     for (auto col=m.szero(); col<m.col_size()-1;) {
-        if (is_wall_col(col, m) && is_wall_col(col+1, m)) {
+        if (is_wall_range(m.col_range(col)) && is_wall_range(m.col_range(col+1))) {
             m = remove_col(col, m);
         }
         else

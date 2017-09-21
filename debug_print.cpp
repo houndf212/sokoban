@@ -36,9 +36,9 @@ template<>
 void print(const IntMatrix &m)
 {
     for (auto row=m.szero(); row<m.row_size(); ++row) {
-        for (auto col=m.szero(); col<m.col_size(); ++col) {
+        for (auto &v : m.row_range(row)) {
             cout.width(2);
-            cout<<m.get(Pos(row, col));
+            cout<<v;
             cout<<" ";
         }
         cout<<endl;
@@ -50,8 +50,7 @@ template<>
 void print(const ElementsMatrix &m)
 {
     for (auto row=m.szero(); row<m.row_size(); ++row) {
-        for (auto col=m.szero(); col<m.col_size(); ++col) {
-            auto e = m.get(Pos(row, col));
+        for (auto &e : m.row_range(row)) {
             cout<<XSB::e_to_char(e);
             cout<<" ";
         }

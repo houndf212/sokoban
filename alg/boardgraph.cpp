@@ -9,12 +9,9 @@
 size_t BoardGraph::BoardHash::operator()(const BoardParam &param) const
 {
     const ElementsMatrix &m = param.room();
-    std::string str;
-    str.reserve(m.row_size()*m.col_size());
-
-    for(const auto &v : m) {
-        str.push_back(static_cast<char>(v));
-    }
+    std::string str(m.row_size()*m.col_size(), 0);
+    auto trans = [](Elements e) { return static_cast<char>(e); };
+    std::transform(m.begin(), m.end(), str.begin(), trans);
     return std::hash<std::string>()(str);
 }
 
