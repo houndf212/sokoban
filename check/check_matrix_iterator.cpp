@@ -217,10 +217,134 @@ void check_bidirectional_iterator()
     check_col_reverse_iterator();
 }
 
+void check_row_randomaccess_iterator()
+{
+    IntMatrix m;
+    m.resize(100, 50);
+    std::vector<IntMatrix::value_type> vec(m.col_size(), 0);
+    std::iota(begin(vec), end(vec), 0);
+    std::random_shuffle(begin(vec), end(vec));
+
+    auto range = m.row_range(10);
+    std::copy(begin(vec), end(vec), range.begin());
+    std::sort(range.begin(), range.end());
+
+    assert(std::is_sorted(range.begin(), range.end()));
+
+    {
+        auto it = m.row_range(0).begin();
+        ++it;
+        it++;
+        --it;
+        it--;
+    }
+}
+
+void check_col_randomaccess_iterator()
+{
+    IntMatrix m;
+    m.resize(100, 50);
+    std::vector<IntMatrix::value_type> vec(m.row_size(), 0);
+    std::iota(begin(vec), end(vec), 0);
+    std::random_shuffle(begin(vec), end(vec));
+
+    auto range = m.col_range(10);
+    std::copy(begin(vec), end(vec), range.begin());
+    std::sort(range.begin(), range.end());
+
+    assert(std::is_sorted(range.begin(), range.end()));
+
+    {
+        auto it = m.col_range(0).end();
+        ++it;
+        it++;
+        --it;
+        it--;
+    }
+}
+
+void check_range_rangdomaccess_iterator()
+{
+    IntMatrix m;
+    m.resize(5, 4);
+    auto it = m.begin();
+    *it = 10;
+    auto it02 = it+2;
+    *it02 = 20;
+    auto it21 = it+ 2*m.col_size()+1;
+    *it21 = 30;
+
+    assert(m.get(Pos(0, 0)) == 10);
+    assert(m.get(Pos(0, 2)) == 20);
+    assert(m.get(Pos(2, 1)) == 30);
+
+
+    std::vector<IntMatrix::value_type> vec(m.row_size()*m.col_size(), 0);
+    std::iota(begin(vec), end(vec), 1);
+    auto range = m.range();
+    std::copy(begin(vec), end(vec), range.begin());
+    {
+        auto it = m.begin();
+        assert(*it==1);
+        auto it1 = it + 2;
+        assert(*it1 == 1+2);
+        auto it2 = it + 10;
+        assert(*it2 == 1+10);
+
+        assert(it2-it == 10);
+
+        auto it3 = it2-5;
+        assert(*it3 == *it2 - 5);
+    }
+    {
+        auto it1 = m.begin();
+        it1+=10;
+        assert(*it1 == 1+10);
+        it1-=5;
+        assert(*it1 == 1+10-5);
+    }
+
+    {
+        auto it = m.begin();
+        ++it;
+
+
+        auto it1 = m.begin();
+        it1 += 10;
+        assert(it1-it == 9);
+
+        it--;
+        it++;
+    }
+
+
+    std::random_shuffle(begin(vec), end(vec));
+
+    std::copy(begin(vec), end(vec), range.begin());
+
+    std::sort(range.begin(), range.end());
+
+    assert(std::is_sorted(range.begin(), range.end()));
+    assert(m.get(Pos(0, 3)) == 4);
+    assert(m.get(Pos(1, 1)) == 6);
+
+    assert(m.get(Pos(4, 3)) == 20);
+
+    std::random_shuffle(range.begin(), range.end());
+}
+
+void check_randomaccess_iterator()
+{
+    check_row_randomaccess_iterator();
+    check_col_randomaccess_iterator();
+    check_range_rangdomaccess_iterator();
+}
+
 bool check_matrix_iterator()
 {
     check_bidirectional_iterator();
     check_forward_iterator();
+    check_randomaccess_iterator();
 
     return true;
 }

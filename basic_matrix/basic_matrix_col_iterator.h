@@ -9,7 +9,7 @@ template<class _Matrix,
          >
 class Basic_Matrix_Col_Iterator
         : public std::iterator
-        <std::bidirectional_iterator_tag,
+        <std::random_access_iterator_tag,
         _Value_Type,
         typename _Matrix::size_type>
 {
@@ -30,6 +30,12 @@ public:
         return m_pos;
     }
 
+    bool operator < (const _Self &right) const
+    {
+        assert(m_matrix == right.m_matrix);
+        return  m_pos < right.m_pos;
+    }
+
     bool operator != (const _Self &right) const
     {
         assert(m_matrix == right.m_matrix);
@@ -40,6 +46,11 @@ public:
     {
         assert(m_matrix == right.m_matrix);
         return  m_pos == right.m_pos;
+    }
+
+    size_type operator - (const _Self &other) const
+    {
+        return m_pos.row() - other.m_pos.row();
     }
 
     typename Parent::reference operator*() const
@@ -53,11 +64,52 @@ public:
         return *this;
     }
 
+    _Self operator++(int)
+    {
+        _Self tmp(*this);
+        ++*this;
+        return tmp;
+    }
+
     _Self &operator--()
     {
         m_pos.row()--;
         return *this;
     }
+
+    _Self operator--(int)
+    {
+        _Self tmp(*this);
+        --*this;
+        return tmp;
+    }
+
+    _Self &operator+=(size_type d)
+    {
+        m_pos.row()+=d;
+        return *this;
+    }
+
+    _Self operator+(size_type d) const
+    {
+        _Self other(*this);
+        other.m_pos.row()+=d;
+        return other;
+    }
+
+    _Self &operator-=(size_type d)
+    {
+        m_pos.row()-=d;
+        return *this;
+    }
+
+    _Self operator-(size_type d) const
+    {
+        _Self other(*this);
+        other.m_pos.row()-=d;
+        return other;
+    }
+
 private:
     Matrix *m_matrix;
     Basic_Pos<size_type> m_pos;

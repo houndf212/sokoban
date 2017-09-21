@@ -9,7 +9,7 @@ template<class _Matrix,
          >
 class Basic_Matrix_Iterator
         : public std::iterator
-        <std::bidirectional_iterator_tag,
+        <std::random_access_iterator_tag,
         _Value_Type,
         typename _Matrix::size_type>
 {
@@ -30,6 +30,12 @@ public:
         return m_pos;
     }
 
+    bool operator < (const _Self &right) const
+    {
+        assert(m_matrix == right.m_matrix);
+        return  m_pos < right.m_pos;
+    }
+
     bool operator != (const _Self &right) const
     {
         assert(m_matrix == right.m_matrix);
@@ -40,6 +46,12 @@ public:
     {
         assert(m_matrix == right.m_matrix);
         return  m_pos == right.m_pos;
+    }
+
+    size_type operator - (const _Self &other) const
+    {
+        assert(m_matrix == other.m_matrix);
+        return to_index() - other.to_index();
     }
 
     typename Parent::reference operator*() const
@@ -57,6 +69,13 @@ public:
         return *this;
     }
 
+    _Self operator++(int)
+    {
+        _Self tmp(*this);
+        ++*this;
+        return tmp;
+    }
+
     _Self &operator--()
     {
         if (m_pos.col() == 0) {
@@ -68,9 +87,52 @@ public:
         }
         return *this;
     }
+
+    _Self operator--(int)
+    {
+        _Self tmp(*this);
+        --*this;
+        return tmp;
+    }
+
+    _Self &operator+=(size_type d)
+    {
+        from_index(to_index()+d);
+        return *this;
+    }
+
+    _Self operator+(size_type d) const
+    {
+        _Self other(*this);
+        other += d;
+        return other;
+    }
+
+    _Self &operator-=(size_type d)
+    {
+        from_index(to_index()-d);
+        return *this;
+    }
+
+    _Self operator-(size_type d) const
+    {
+        _Self other(*this);
+        other -= d;
+        return other;
+    }
+private:
+    inline size_type to_index() const
+    {
+        return m_pos.row()*m_matrix->col_size() + m_pos.col();
+    }
+
+    inline void from_index(size_type index)
+    {
+        m_pos.row() = index / m_matrix->col_size();
+        m_pos.col() = index % m_matrix->col_size();
+    }
 private:
     Matrix *m_matrix;
     Basic_Pos<size_type> m_pos;
 };
-
 #endif // BASIC_MATRIX_ITERATOR_H
