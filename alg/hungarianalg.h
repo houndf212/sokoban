@@ -94,31 +94,30 @@ private:
     {
         std::fill(begin(mask), end(mask), false);
     }
+
+    template<class R>
+    static void minimize_range(const R &range)
+    {
+        auto min_val = *std::min_element(range.begin(), range.end());
+        for (auto &v : range) {
+            v -= min_val;
+        }
+    }
+
     //每行减去行最小值
     static void minimize_row(Basic_Resize_Matrix<T, type_size> &m)
     {
         assert(m.row_size()>=2 && m.col_size()>=2);
+        for (auto row=m.szero(); row<m.row_size(); ++row)
+            minimize_range(m.row_range(row));
 
-        for (auto row=m.szero(); row<m.row_size(); ++row) {
-            auto range = m.row_range(row);
-            auto min_iter = std::min_element(range.begin(), range.end());
-            for (auto &v : range) {
-                v -= *min_iter;
-            }
-        }
     }
     //每列减去列最小值
     static void minimize_col(Basic_Resize_Matrix<T, type_size> &m)
     {
         assert(m.row_size()>=2 && m.col_size()>=2);
-
-        for (auto col=m.szero(); col<m.col_size(); ++col) {
-            auto range = m.col_range(col);
-            auto min_iter = std::min_element(range.begin(), range.end());
-            for (auto &v : range) {
-                v -= *min_iter;
-            }
-        }
+        for (auto col=m.szero(); col<m.col_size(); ++col)
+            minimize_range(m.col_range(col));
     }
 private:
     //找到未被覆盖的 0 ，即是 独立0 也就是 prime

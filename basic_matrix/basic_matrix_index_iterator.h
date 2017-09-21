@@ -175,12 +175,12 @@ public:
 
     typename Parent::reference operator*() const
     {
-        return *m_iter;
+        return m_iter.operator *();
     }
 
     typename Parent::pointer operator ->() const
     {
-        return &*m_iter;
+        return m_iter.operator ->();
     }
 
     _Self &operator++()
