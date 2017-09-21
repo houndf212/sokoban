@@ -340,11 +340,32 @@ void check_randomaccess_iterator()
     check_range_rangdomaccess_iterator();
 }
 
+void check_operator_arrow()
+{
+    typedef Basic_Resize_Matrix<Pos, int> PosMatrix;
+    PosMatrix m;
+    m.resize(2, 2);
+    auto it = m.begin();
+    *it = Pos(2, 2);
+    assert(*it == Pos(2, 2));
+    it->row() = 3;
+    assert(*it == Pos(3, 2));
+    assert(it->col() == 2);
+
+    auto cit = m.col_range(1).begin();
+    *cit = Pos(100, 200);
+    assert(cit->row() == 100);
+    cit->col() = 1000;
+    assert((*cit).col() == 1000);
+}
+
 bool check_matrix_iterator()
 {
     check_bidirectional_iterator();
     check_forward_iterator();
     check_randomaccess_iterator();
+
+    check_operator_arrow();
 
     return true;
 }

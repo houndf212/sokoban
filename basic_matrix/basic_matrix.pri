@@ -6,7 +6,8 @@ HEADERS += \
     $$PWD/basic_resize_matrix.h \
     $$PWD/iteratorrange.h \
     $$PWD/basic_matrix_row_iterator.h \
-    $$PWD/basic_matrix_col_iterator.h
+    $$PWD/basic_matrix_col_iterator.h \
+    $$PWD/basic_matrix_index_iterator.h
 
 
 

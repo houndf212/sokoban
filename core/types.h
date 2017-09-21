@@ -11,7 +11,7 @@
 #include "movedirection.h"
 
 typedef short type_value;
-typedef short type_size;
+typedef int type_size;
 
 typedef Basic_Pos<type_size> Pos;
 
