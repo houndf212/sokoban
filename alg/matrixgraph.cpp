@@ -11,10 +11,8 @@ size_t MatrixGraph::PosHash::operator()(const Pos &p) const
 }
 
 MatrixGraph::MatrixGraph(const ElementsMatrix &m)
+    :matrix(m.row_size(), m.col_size())
 {
-    matrix.resize(m.size());
-    matrix.unmask_all();
-
     for (auto it=m.range(); it; ++it) {
         //mask表示可行路径
         if (*it == Elements::floor)

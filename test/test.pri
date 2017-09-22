@@ -10,7 +10,8 @@ SOURCES += \
     $$PWD/matrix.cpp \
     $$PWD/test_munkres.cpp \
     $$PWD/test_hungarianalg.cpp \
-    $$PWD/test_matrix_iterator.cpp
+    $$PWD/test_matrix_iterator.cpp \
+    $$PWD/test_matrix_resize.cpp
 
 HEADERS += \
     $$PWD/matrix.h \

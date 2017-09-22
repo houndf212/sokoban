@@ -27,8 +27,7 @@ public:
         //复制矩阵用来操作
         matrix = m;
 
-        mask_matrix.resize(matrix.size());
-        mask_matrix.fill(NORMAL);
+        mask_matrix = IntMatrix(matrix.row_size(), matrix.col_size(), NORMAL);
 
         //先设置全部未标记
         row_mask.resize(size);

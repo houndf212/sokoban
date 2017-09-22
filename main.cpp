@@ -22,15 +22,16 @@ void test()
     extern void test_munkres();
     extern void test_HungarianAlg();
     extern void test_matrix_iterator();
+    extern void test_matrix_resize();
 
-//    test_matrix_iterator();
+    test_matrix_resize();
 }
 
 int main(int argc, char *argv[])
 {
     assert(check());
-//    test();
-//    return 0;
+    test();
+    return 0;
     QApplication a(argc, argv);
 
     GameWindow w;

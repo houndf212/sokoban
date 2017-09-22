@@ -47,8 +47,7 @@ BoardGraph::distance_t BoardGraph::heuristic(const BoardGraph::vertex_t &v1, con
     Q_UNUSED(v2);
 
     const auto size = static_cast<type_size>(v1.goals_size());
-    IntMatrix m;
-    m.resize(size, size);
+    IntMatrix m(size, size, 0);
 
     auto index = m.szero();
     for (auto box : v1.boxes()) {
@@ -71,9 +70,7 @@ BoardGraph::distance_t BoardGraph::greedy_search(const IntMatrix &m)
 
     assert(m.row_size() == m.col_size());
     const auto size = m.row_size();
-    MaskMatrix mask;
-    mask.resize(m.size());
-    mask.unmask_all();
+    MaskMatrix mask(m.row_size(), m.col_size());
 
     auto mask_p = [&mask](Pos p) {
         for(auto i=mask.szero(); i<mask.row_size(); ++i) {

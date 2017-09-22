@@ -4,8 +4,7 @@ using namespace std;
 
 IntMatrix get_m()
 {
-    IntMatrix m;
-    m.resize(5, 5);
+    IntMatrix m(5, 5);
     int arr[5*5] = {
         12, 7, 9, 7, 9,
         8, 9, 6, 6, 6,
@@ -14,10 +13,7 @@ IntMatrix get_m()
         4, 10, 7, 10, 9
     };
 
-    int index = 0;
-    for (auto &v: m) {
-        v = arr[index++];
-    }
+    std::copy(arr, arr+5*5, m.begin());
     return m;
 }
 

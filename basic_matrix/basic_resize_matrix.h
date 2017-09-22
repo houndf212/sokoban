@@ -20,18 +20,46 @@ public:
     static constexpr size_type szero() { return S(0); }
     static constexpr value_type vmax() { return std::numeric_limits<value_type>::max(); }
 
-    void resize(size_type row, size_type col)
+//    Basic_Resize_Matrix(const Basic_Resize_Matrix&) = delete;
+//    Basic_Resize_Matrix &operator =(const Basic_Resize_Matrix&) = delete;
+
+    Basic_Resize_Matrix() : n_row(0), n_col(0) {}
+    Basic_Resize_Matrix(size_type row, size_type col, value_type val=value_type())
     {
         n_row = row;
         n_col = col;
 
-        std::vector<value_type> vec(n_col, value_type());
+        std::vector<value_type> vec(n_col, val);
         mat = std::vector<std::vector<value_type>>(row, vec);
     }
 
-    void resize(const std::pair<size_type, size_type> &p)
+    //完成 扩展矩阵
+    void resize(size_type row, size_type col, value_type val=value_type())
     {
-        resize(p.first, p.second);
+        if (row == row_size() && col == col_size()) {
+            return;
+        }
+        else if (row == row_size()) {
+            resize_col(col, val);
+        }
+        else {
+            if (col == col_size()) {
+                resize_row(row, col, val);
+                //return;
+            }
+            //这两个交换顺序为的是减少行resize的时候减少调用次数
+            else if (row > row_size()) {
+                //当扩展行时，先对其列
+                resize_col(col, val);
+                resize_row(row, col, val);
+            }
+            else {
+                //当缩小行时，先缩小列
+                resize_row(row, col, val);
+                resize_col(col, val);
+            }
+
+        }
     }
 
     void fill(value_type val)
@@ -80,7 +108,22 @@ public:
         assert(size()==bm.size());
         return mat < bm.mat;
     }
+private:
+    void resize_row(size_type row, size_type col, value_type val)
+    {
+        assert(row != row_size());
+        mat.resize(row, std::vector<value_type>(col, val));
+        n_row = row;
+    }
 
+    void resize_col(size_type col, value_type val)
+    {
+        assert(col_size() != val);
+        for (auto &vec : mat) {
+            vec.resize(col, val);
+        }
+        n_col = col;
+    }
 private:
     size_type n_row;
     size_type n_col;

@@ -8,8 +8,7 @@ typedef HungarianAlg<IntMatrix::value_type> Hun;
 IntMatrix rand_matrix()
 {
     std::srand(std::time(0));
-    IntMatrix m;
-    m.resize(4, 4);
+    IntMatrix m(100, 100);
 
     for (auto &v : m) {
         v = rand() % 100;
