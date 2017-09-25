@@ -12,8 +12,7 @@ RoomSlice::RoomSlice(const BoardParam &pa)
         if (slice.get(p) != k_unflagged)
             continue;
 
-        auto e = *it;
-        if (e!=Elements::floor) {
+        if (*it != Elements::floor) {
             slice.set(p, k_block);
             continue;
         }

@@ -29,9 +29,9 @@ void test()
 
 int main(int argc, char *argv[])
 {
-    assert(check());
-    test();
-    return 0;
+//    assert(check());
+//    test();
+//    return 0;
     QApplication a(argc, argv);
 
     GameWindow w;
