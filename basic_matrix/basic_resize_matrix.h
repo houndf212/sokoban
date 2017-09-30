@@ -92,11 +92,6 @@ public:
     size_type row_size() const { return n_row; }
     size_type col_size() const { return n_col; }
 
-    std::pair<size_type, size_type> size() const
-    {
-        return std::make_pair(row_size(), col_size());
-    }
-
     bool equal(const Basic_Resize_Matrix& bm) const
     {
         assert(size()==bm.size());
@@ -123,6 +118,11 @@ private:
             vec.resize(col, val);
         }
         n_col = col;
+    }
+
+    std::pair<size_type, size_type> size() const
+    {
+        return std::make_pair(row_size(), col_size());
     }
 private:
     size_type n_row;
