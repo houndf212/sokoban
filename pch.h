@@ -5,6 +5,7 @@
 #include <QtGui>
 #include <QtWidgets>
 #include <vector>
+#include <list>
 #include <set>
 #include <unordered_map>
 #include <algorithm>
