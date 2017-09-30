@@ -47,8 +47,7 @@ BoardGraph::distance_t BoardGraph::heuristic(const BoardGraph::vertex_t &v1, con
     Q_UNUSED(v2);
 
     const auto size = static_cast<type_size>(v1.goals_size());
-    IntMatrix m;
-    m.resize(size, size);
+    IntMatrix m(size, size, 0);
 
     auto index = m.szero();
     for (auto box : v1.boxes()) {
@@ -71,9 +70,7 @@ BoardGraph::distance_t BoardGraph::greedy_search(const IntMatrix &m)
 
     assert(m.row_size() == m.col_size());
     const auto size = m.row_size();
-    MaskMatrix mask;
-    mask.resize(m.size());
-    mask.unmask_all();
+    MaskMatrix mask(m.row_size(), m.col_size());
 
     auto mask_p = [&mask](Pos p) {
         for(auto i=mask.szero(); i<mask.row_size(); ++i) {
@@ -131,21 +128,17 @@ MoveList BoardGraph::trans_to(const BoardGraph::VertexList &ves)
 //计算两个 box move 之间的插值 v1 --> v2
 MoveList BoardGraph::to_movelist(const BoardGraph::vertex_t &v1, const BoardGraph::vertex_t &v2)
 {
-    //先找到box 移动的位置
-    Pos box1(-1, -1);
-    for (auto p : v1.boxes()) {
-        if (v2.room().get(p) != Elements::box) {
-            box1 = p;
-            break;
-        }
-    }
-    Pos box2(-1, -1);
-    for (auto p : v2.boxes()) {
-        if (v1.room().get(p) != Elements::box) {
-            box2 = p;
-            break;
-        }
-    }
+    //先找到 box 移动的位置
+    auto v2_not_box = [&v2](const Pos &p) { return v2.room().get(p) != Elements::box; };
+    auto it1 = std::find_if(begin(v1.boxes()), end(v1.boxes()), v2_not_box);
+    assert(it1 != end(v1.boxes()));
+    Pos box1 = *it1;
+
+    auto v1_not_box = [&v1](const Pos &p) { return v1.room().get(p) != Elements::box; };
+    auto it2 = std::find_if(begin(v2.boxes()), end(v2.boxes()), v1_not_box);
+    assert(it2 != end(v2.boxes()));
+    Pos box2 = *it2;
+
     assert(box1 != box2);
     Direction push = pos_to(box1, box2);
     assert(push!=Direction::NotValid);

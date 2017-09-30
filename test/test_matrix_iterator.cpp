@@ -97,8 +97,7 @@ void test_for_range_get(const IntMatrix &mat)
 
 void test_matrix_iterator()
 {
-    IntMatrix mat;
-    mat.resize(3, 3);
+    IntMatrix mat(3, 3);
 
 //    test_set(mat);
 //    print(mat);

@@ -152,11 +152,8 @@ bool BoardParam::like_equal(const BoardParam &param) const
 
 bool BoardParam::is_done() const
 {
-    for (auto p : goals()) {
-        if (room().get(p) != Elements::box)
-            return false;
-    }
-    return true;
+    auto is_box = [this](const Pos &p) { return room().get(p) == Elements::box; };
+    return std::all_of(begin(goals()), end(goals()), is_box);
 }
 
 bool BoardParam::is_goal(Pos p) const
@@ -185,11 +182,8 @@ bool BoardParam::is_absolutely_dead_box(Pos box) const
 
 bool BoardParam::is_absolutely_dead() const
 {
-    for (auto p : boxes()) {
-        if (!is_goal(p) && is_absolutely_dead_box(p))
-            return true;
-    }
-    return false;
+    auto dead_box = [this](const Pos &p) { return !is_goal(p) && is_absolutely_dead_box(p); };
+    return std::any_of(begin(boxes()), end(boxes()), dead_box);
 }
 
 ElementsMatrix BoardParam::to_matrix() const

@@ -2,11 +2,9 @@
 
 RoomSlice::RoomSlice(const BoardParam &pa)
     :param(pa)
+    ,slice(param.room().row_size(), param.room().col_size(), k_unflagged)
 {
     const auto &matrix = param.room();
-
-    slice.resize(matrix.size());
-    slice.fill(k_unflagged);
 
     IntMatrix::value_type g = 1;
     for (auto it=matrix.range(); it; ++it) {
@@ -14,8 +12,7 @@ RoomSlice::RoomSlice(const BoardParam &pa)
         if (slice.get(p) != k_unflagged)
             continue;
 
-        auto e = *it;
-        if (e!=Elements::floor) {
+        if (*it != Elements::floor) {
             slice.set(p, k_block);
             continue;
         }

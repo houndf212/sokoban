@@ -4,8 +4,7 @@
 
 void check_range_iterator()
 {
-    IntMatrix m;
-    m.resize(2, 2);
+    IntMatrix m(2, 2);
 
     int i=1;
     for (auto &v : m.range()) {
@@ -27,8 +26,7 @@ void check_range_iterator()
 
 void check_range_reverse_iterator()
 {
-    IntMatrix m;
-    m.resize(2, 2);
+    IntMatrix m(2, 2);
 
     int i=1;
     for (auto &v : m.reverse_range()) {
@@ -50,8 +48,8 @@ void check_range_reverse_iterator()
 
 void check_row_iterator()
 {
-    IntMatrix m;
-    m.resize(2, 2);
+    IntMatrix m(2, 2);
+
     int i=10;
     for (auto &v : m.row_range(0)) {
         v = i;
@@ -71,8 +69,8 @@ void check_row_iterator()
 
 void check_row_reverse_iterator()
 {
-    IntMatrix m;
-    m.resize(2, 2);
+    IntMatrix m(2, 2);
+
     int i=10;
     for (auto &v : m.row_reverse_range(0)) {
         v = i;
@@ -96,8 +94,8 @@ void check_row_reverse_iterator()
 
 void check_col_iterator()
 {
-    IntMatrix m;
-    m.resize(2, 2);
+    IntMatrix m(2, 2);
+
     int i=10;
     for (auto &v : m.col_range(0)) {
         v = i;
@@ -117,8 +115,8 @@ void check_col_iterator()
 
 void check_col_reverse_iterator()
 {
-    IntMatrix m;
-    m.resize(2, 2);
+    IntMatrix m(2, 2);
+
     int i=10;
     for (auto &v : m.col_reverse_range(0)) {
         v = i;
@@ -145,8 +143,7 @@ void check_range_min_max()
 {
     int n = 100;
     while(n-->0) {
-        IntMatrix m;
-        m.resize(2, 3);
+        IntMatrix m(2, 3);
 
         std::vector<IntMatrix::value_type> vec(m.row_size()*m.col_size(), 0);
         std::iota(begin(vec), end(vec), n);
@@ -164,8 +161,7 @@ void check_row_min_max()
 {
     int n = 100;
     while(n-->0) {
-        IntMatrix m;
-        m.resize(4, 4);
+        IntMatrix m(4, 4);
 
         std::vector<IntMatrix::value_type> vec(m.col_size(), 0);
         std::iota(begin(vec), end(vec), n);
@@ -184,8 +180,7 @@ void check_col_min_max()
 {
     int n = 100;
     while(n-->0) {
-        IntMatrix m;
-        m.resize(5, 6);
+        IntMatrix m(5, 6);;
 
         std::vector<IntMatrix::value_type> vec(m.row_size(), 0);
         std::iota(begin(vec), end(vec), n);
@@ -219,8 +214,8 @@ void check_bidirectional_iterator()
 
 void check_row_randomaccess_iterator()
 {
-    IntMatrix m;
-    m.resize(100, 50);
+    IntMatrix m(100, 50);
+
     std::vector<IntMatrix::value_type> vec(m.col_size(), 0);
     std::iota(begin(vec), end(vec), 0);
     std::random_shuffle(begin(vec), end(vec));
@@ -242,8 +237,8 @@ void check_row_randomaccess_iterator()
 
 void check_col_randomaccess_iterator()
 {
-    IntMatrix m;
-    m.resize(100, 50);
+    IntMatrix m(100, 50);
+
     std::vector<IntMatrix::value_type> vec(m.row_size(), 0);
     std::iota(begin(vec), end(vec), 0);
     std::random_shuffle(begin(vec), end(vec));
@@ -265,8 +260,8 @@ void check_col_randomaccess_iterator()
 
 void check_range_rangdomaccess_iterator()
 {
-    IntMatrix m;
-    m.resize(5, 4);
+    IntMatrix m(5, 4);
+
     auto it = m.begin();
     *it = 10;
     auto it02 = it+2;
@@ -343,8 +338,8 @@ void check_randomaccess_iterator()
 void check_operator_arrow()
 {
     typedef Basic_Resize_Matrix<Pos, int> PosMatrix;
-    PosMatrix m;
-    m.resize(2, 2);
+    PosMatrix m(2, 2);
+
     auto it = m.begin();
     *it = Pos(2, 2);
     assert(*it == Pos(2, 2));

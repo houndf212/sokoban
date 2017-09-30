@@ -31,8 +31,7 @@
 
 IntMatrix from(const Matrix<int> &m)
 {
-    IntMatrix matrix;
-    matrix.resize(m.rows(), m.columns());
+    IntMatrix matrix(m.rows(), m.columns());
 
     for (size_t row=0; row<m.rows(); ++row) {
         for (size_t col=0; col<m.columns(); ++col) {

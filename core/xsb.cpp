@@ -51,27 +51,26 @@ Elements XSB::char_to_e(char c)
 
 ElementsMatrix XSB::from_file(const char *filestr)
 {
-    ElementsMatrix em;
+
     QFile file(filestr);
     bool b = file.open(QFile::ReadOnly);
     if (!b)
-        return em;
+        return ElementsMatrix(0, 0);
 
     QByteArray arr = file.readAll();
     arr = arr.trimmed();
     QByteArrayList lst = arr.split('\n');
     if (lst.isEmpty())
-        return em;
+        return ElementsMatrix(0, 0);
 
-    auto col_size = em.szero();
-    for (auto i=em.szero(); i<lst.size(); ++i) {
+    auto col_size = ElementsMatrix::szero();
+    for (auto i=ElementsMatrix::szero(); i<lst.size(); ++i) {
         lst[i] = lst[i].trimmed();
         col_size = std::max(col_size, type_size(lst.at(i).size()));
     }
     type_size row_size = lst.size();
 
-    em.resize(row_size, col_size);
-    em.fill(Elements::floor);
+    ElementsMatrix em(row_size, col_size, Elements::floor);
 
     for (auto row=em.szero(); row<row_size; ++row) {
         const auto &line = lst.at(row);
@@ -191,8 +190,7 @@ static bool is_wall_range(const R &range)
 
 static ElementsMatrix remove_row(type_size row, const ElementsMatrix &m)
 {
-    ElementsMatrix em;
-    em.resize(m.row_size()-1, m.col_size());
+    ElementsMatrix em(m.row_size()-1, m.col_size(), Elements::floor);
 
     for (auto r=m.szero(); r<m.row_size(); ++r) {
         if (r == row) continue;
@@ -204,8 +202,7 @@ static ElementsMatrix remove_row(type_size row, const ElementsMatrix &m)
 
 static ElementsMatrix remove_col(type_size col, const ElementsMatrix &m)
 {
-    ElementsMatrix em;
-    em.resize(m.row_size(), m.col_size()-1);
+    ElementsMatrix em(m.row_size(), m.col_size()-1, Elements::floor);
 
     for (auto c=m.szero(); c<m.col_size(); ++c) {
         if (c == col) continue;

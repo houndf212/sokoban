@@ -5,7 +5,8 @@
 class MaskMatrix : public BoolMatrix
 {
 public:
-    void unmask_all() { fill(k_unmask); }
+    MaskMatrix(size_type row, size_type col) : BoolMatrix(row, col, k_unmask) {}
+//    void unmask_all() { fill(k_unmask); }
     void mask(Pos p) { set(p, k_mask); }
     bool is_mask(Pos p) const { return get(p) == k_mask; }
 private:
