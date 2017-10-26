@@ -1,14 +1,8 @@
 ﻿#include "matrixgraph.h"
 #include "dijkstra.h"
-#include <limits>
 
-size_t MatrixGraph::PosHash::operator()(const Pos &p) const
-{
-    constexpr int half = sizeof(p.row())*8/2;
-    assert(p.row()*p.col() < std::numeric_limits<Pos::value_type>::max());
-    size_t c = static_cast<size_t>(p.row()) << half | static_cast<size_t>(p.col());
-    return std::hash<size_t>()(c);
-}
+
+
 
 MatrixGraph::MatrixGraph(const ElementsMatrix &m)
     :matrix(m.row_size(), m.col_size())

@@ -5,10 +5,6 @@
 
 class BoardGraph
 {
-    struct BoardHash
-    {
-        size_t operator()(const BoardParam &param) const;
-    };
 public:
     typedef BoardParam vertex_t;
     typedef type_size distance_t;

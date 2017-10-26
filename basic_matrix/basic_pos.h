@@ -49,4 +49,17 @@ inline bool operator!=(const Basic_Pos<T> &p1, const Basic_Pos<T> &p2)
     return !p1.equal(p2);
 }
 
+#include <limits>
+template <class T>
+struct BasicPosHash
+{
+    size_t operator()(const Basic_Pos<T> &p) const
+    {
+        constexpr int half = sizeof(p.row())*8/2;
+        assert(p.row()*p.col() < std::numeric_limits<T>::max());
+        size_t c = static_cast<size_t>(p.row()) << half | static_cast<size_t>(p.col());
+        return std::hash<size_t>()(c);
+    }
+};
+
 #endif // BASIC_POS_H

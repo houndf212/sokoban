@@ -30,11 +30,31 @@ public:
     }
     const PosVector &boxes() const { return box_index; }
 
-    const ElementsMatrix &room() const { return m_room; }
+    //只包含 wall floor box, 即是说不包含goals和人
+    ElementsMatrix cache_room() const;
+
+    const ElementsMatrix *empty_room() const
+    {
+        assert(m_empty_room!=nullptr);
+        return m_empty_room.get();
+    }
+
+    //空的即是说，不是墙，也不是box
+    bool is_empty(Pos p) const
+    {
+        return !is_wall(p) && !is_box(p);
+    }
 
     //测试函数
     bool is_done() const;
+    bool is_wall(Pos p) const
+    {
+        assert(empty_room()!=nullptr);
+        return empty_room()->get(p) == Elements::wall;
+    }
     bool is_goal(Pos p) const;
+    bool is_box(Pos p) const;
+    bool is_same_boxes(const BoardParam &param) const;
     bool is_absolutely_dead_box(Pos box) const;
     bool is_absolutely_dead() const;
     bool can_solve(const MoveList &mlst) const;
@@ -48,21 +68,25 @@ public:
 private:
     void box_move(Pos box, Pos to);
     bool can_box_move(Pos box, Direction d) const;
-private:
-    //暂时未使用的函数
+public:
     bool precise_equal(const BoardParam &param) const;
     bool like_equal(const BoardParam &param) const;
 private:
     //人所在的位置
     Pos man_pos;
-    //目标位置
-    std::shared_ptr<PosVector> m_goals;
-    //只包含 wall floor box
-    ElementsMatrix m_room;
     // box 的索引
     PosVector box_index;
+    //目标位置, set之后就不会变了
+    std::shared_ptr<PosVector> m_goals;
+    //只包含 wall floor的"空"房子,和goals一样，set之后就不会变了
+    std::shared_ptr<ElementsMatrix> m_empty_room;
 };
 
 bool operator == (const BoardParam &p1, const BoardParam &p2);
+
+struct BoardHash
+{
+    size_t operator()(const BoardParam &param) const;
+};
 
 #endif // BOARDPARAM_H
