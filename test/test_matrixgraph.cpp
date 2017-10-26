@@ -27,7 +27,7 @@ void test_matrixgraph()
 
     print(start);
 
-    MatrixGraph g(start.room());
+    MatrixGraph g(start.cache_room());
 
     auto path = g.shortest_path(p_start, p_end);
     print(path);

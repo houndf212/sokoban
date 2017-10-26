@@ -5,14 +5,10 @@
 
 class MatrixGraph
 {
-    struct PosHash
-    {
-        size_t operator()(const Pos &p) const;
-    };
 public:
     typedef Pos vertex_t;
     typedef MaskMatrix::size_type distance_t;
-    typedef PosHash hash_t;
+    typedef BasicPosHash<Pos::value_type> hash_t;
     typedef PosVector VertexVector;
 
     MatrixGraph(const ElementsMatrix &m);

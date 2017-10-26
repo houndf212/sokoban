@@ -24,7 +24,7 @@ void test()
     extern void test_matrix_iterator();
     extern void test_matrix_resize();
 
-    test_matrix_resize();
+//    test_matrix_resize();
 }
 
 int main(int argc, char *argv[])

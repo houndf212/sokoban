@@ -6,15 +6,6 @@
 #include "matrixgraph.h"
 #include "dijkstra.h"
 
-size_t BoardGraph::BoardHash::operator()(const BoardParam &param) const
-{
-    const ElementsMatrix &m = param.room();
-    std::string str(m.row_size()*m.col_size(), 0);
-    auto trans = [](Elements e) { return static_cast<char>(e); };
-    std::transform(m.begin(), m.end(), str.begin(), trans);
-    return std::hash<std::string>()(str);
-}
-
 MoveList BoardGraph::solve(const BoardGraph::vertex_t &start)
 {
     typedef BoardGraph BG;
@@ -51,7 +42,7 @@ BoardGraph::distance_t BoardGraph::heuristic(const BoardGraph::vertex_t &v1, con
 
     auto index = m.szero();
     for (auto box : v1.boxes()) {
-        for (auto goal : v1.goals()) {
+        for (auto goal : *v1.goals()) {
             distance_t d = Manhattan_Distance(box, goal);
             Pos p(index/size, index%size);
             m.set(p, d);
@@ -129,12 +120,12 @@ MoveList BoardGraph::trans_to(const BoardGraph::VertexList &ves)
 MoveList BoardGraph::to_movelist(const BoardGraph::vertex_t &v1, const BoardGraph::vertex_t &v2)
 {
     //先找到 box 移动的位置
-    auto v2_not_box = [&v2](const Pos &p) { return v2.room().get(p) != Elements::box; };
+    auto v2_not_box = [&v2](const Pos &p) { return !v2.is_box(p); };
     auto it1 = std::find_if(begin(v1.boxes()), end(v1.boxes()), v2_not_box);
     assert(it1 != end(v1.boxes()));
     Pos box1 = *it1;
 
-    auto v1_not_box = [&v1](const Pos &p) { return v1.room().get(p) != Elements::box; };
+    auto v1_not_box = [&v1](const Pos &p) { return !v1.is_box(p); };
     auto it2 = std::find_if(begin(v2.boxes()), end(v2.boxes()), v1_not_box);
     assert(it2 != end(v2.boxes()));
     Pos box2 = *it2;
@@ -149,7 +140,7 @@ MoveList BoardGraph::to_movelist(const BoardGraph::vertex_t &v1, const BoardGrap
     if (man_from != man_to) {
 
         typedef Dijkstra<MatrixGraph> G;
-        MatrixGraph g(v1.room());
+        MatrixGraph g(v1.cache_room());
 
         auto path = G::AStart_path(g, man_from, man_to);
         for (auto p : path.first) {
@@ -164,7 +155,7 @@ MoveList BoardGraph::to_movelist(const BoardGraph::vertex_t &v1, const BoardGrap
 
     if (man_from != v2.man()) {
         typedef Dijkstra<MatrixGraph> G;
-        MatrixGraph g(v2.room());
+        MatrixGraph g(v2.cache_room());
 
         auto path = G::AStart_path(g, man_from, v2.man());
         for (auto p : path.first) {
