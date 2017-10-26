@@ -5,7 +5,7 @@
 void BoardParam::set_matrix(const ElementsMatrix &m)
 {
     m_room = m;
-    m_goals.clear();
+    m_goals.reset(new PosVector);
     box_index.clear();
 
     for (auto it=m.range(); it; ++it) {
@@ -20,17 +20,17 @@ void BoardParam::set_matrix(const ElementsMatrix &m)
             box_index.push_back(p);
             break;
         case Elements::goal:
-            m_goals.push_back(p);
+            m_goals->push_back(p);
             m_room.set(p, Elements::floor);
             break;
         case Elements::man_goal:
             man_pos = p;
-            m_goals.push_back(p);
+            m_goals->push_back(p);
             m_room.set(p, Elements::floor);
             break;
         case Elements::box_goal:
             box_index.push_back(p);
-            m_goals.push_back(p);
+            m_goals->push_back(p);
             m_room.set(p, Elements::box);
             break;
         default:
@@ -153,12 +153,12 @@ bool BoardParam::like_equal(const BoardParam &param) const
 bool BoardParam::is_done() const
 {
     auto is_box = [this](const Pos &p) { return room().get(p) == Elements::box; };
-    return std::all_of(begin(goals()), end(goals()), is_box);
+    return std::all_of(goals()->begin(), goals()->end(), is_box);
 }
 
 bool BoardParam::is_goal(Pos p) const
 {
-    return std::find(begin(goals()), end(goals()), p) != end(goals());
+    return std::find(goals()->begin(), goals()->end(), p) != goals()->end();
 }
 
 bool BoardParam::is_absolutely_dead_box(Pos box) const
@@ -192,7 +192,7 @@ ElementsMatrix BoardParam::to_matrix() const
 
     m.set(man(), Elements::man);
 
-    for (auto p : goals()) {
+    for (auto p : *goals()) {
         auto e = m.get(p);
         m.set(p, add_goal(e));
     }
@@ -206,7 +206,7 @@ BoardParam BoardParam::to_goal() const
         pa.m_room.set(p, Elements::floor);
     }
 
-    pa.box_index = pa.goals();
+    pa.box_index = *pa.goals();
     for (auto p : pa.boxes()) {
         pa.m_room.set(p, Elements::box);
     }
