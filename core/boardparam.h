@@ -77,9 +77,9 @@ private:
     // box 的索引
     PosVector box_index;
     //目标位置, set之后就不会变了
-    std::shared_ptr<PosVector> m_goals;
+    std::shared_ptr<const PosVector> m_goals;
     //只包含 wall floor的"空"房子,和goals一样，set之后就不会变了
-    std::shared_ptr<ElementsMatrix> m_empty_room;
+    std::shared_ptr<const ElementsMatrix> m_empty_room;
 };
 
 bool operator == (const BoardParam &p1, const BoardParam &p2);

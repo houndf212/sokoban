@@ -5,7 +5,10 @@
 void BoardParam::set_matrix(const ElementsMatrix &m)
 {
     m_goals.reset(new PosVector);
+    PosVector* _m_goals = const_cast<PosVector*>(m_goals.get());
+
     m_empty_room.reset(new ElementsMatrix(m));
+    ElementsMatrix* _m_empty_room = const_cast<ElementsMatrix*>(m_empty_room.get());
     box_index.clear();
 
     for (auto it=m.range(); it; ++it) {
@@ -14,31 +17,31 @@ void BoardParam::set_matrix(const ElementsMatrix &m)
         switch (e) {
         case Elements::man:
             man_pos = p;
-            m_empty_room->set(p, Elements::floor);
+            _m_empty_room->set(p, Elements::floor);
             break;
         case Elements::box:
             box_index.push_back(p);
-            m_empty_room->set(p, Elements::floor);
+            _m_empty_room->set(p, Elements::floor);
             break;
         case Elements::goal:
-            m_goals->push_back(p);
-            m_empty_room->set(p, Elements::floor);
+            _m_goals->push_back(p);
+            _m_empty_room->set(p, Elements::floor);
             break;
         case Elements::man_goal:
             man_pos = p;
-            m_goals->push_back(p);
-            m_empty_room->set(p, Elements::floor);
+            _m_goals->push_back(p);
+            _m_empty_room->set(p, Elements::floor);
             break;
         case Elements::box_goal:
             box_index.push_back(p);
-            m_goals->push_back(p);
-            m_empty_room->set(p, Elements::floor);
+            _m_goals->push_back(p);
+            _m_empty_room->set(p, Elements::floor);
             break;
         default:
             break;
         }
     }
-    m_goals->shrink_to_fit();
+    _m_goals->shrink_to_fit();
     box_index.shrink_to_fit();
 }
 
