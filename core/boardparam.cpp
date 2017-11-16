@@ -177,11 +177,8 @@ bool BoardParam::is_box(Pos p) const
 
 bool BoardParam::is_same_boxes(const BoardParam &param) const
 {
-    for (auto p : boxes()) {
-        if (!param.is_box(p))
-            return false;
-    }
-    return true;
+    auto this_is_box = [this](const Pos &p) { return is_box(p); };
+    return std::all_of(param.boxes().begin(), param.boxes().end(), this_is_box);
 }
 
 bool BoardParam::is_absolutely_dead_box(Pos box) const
