@@ -9,6 +9,7 @@
 #include <queue>
 #include <assert.h>
 #include <iostream>
+#include <QtGlobal>
 
 template<class G>
 class Dijkstra

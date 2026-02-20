@@ -30,6 +30,7 @@ include(core/core.pri)
 include(alg/alg.pri)
 include(ui/ui.pri)
 include(games/games.pri)
+include(check/check.pri)
 
 Debug{
 include(check/check.pri)

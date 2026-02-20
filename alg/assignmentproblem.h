@@ -1,5 +1,6 @@
 ﻿#ifndef ASSIGNMENTPROBLEM_H
 #define ASSIGNMENTPROBLEM_H
+#include <numeric>
 #include "types.h"
 #include "hungarianalg.h"
 
