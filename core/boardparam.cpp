@@ -4,11 +4,9 @@
 
 void BoardParam::set_matrix(const ElementsMatrix &m)
 {
-    m_goals.reset(new PosVector);
-    PosVector* _m_goals = const_cast<PosVector*>(m_goals.get());
+    PosVector* _m_goals = new PosVector;
+    ElementsMatrix* _m_empty_room = new ElementsMatrix(m);
 
-    m_empty_room.reset(new ElementsMatrix(m));
-    ElementsMatrix* _m_empty_room = const_cast<ElementsMatrix*>(m_empty_room.get());
     box_index.clear();
 
     for (auto it=m.range(); it; ++it) {
@@ -41,8 +39,11 @@ void BoardParam::set_matrix(const ElementsMatrix &m)
             break;
         }
     }
+
     _m_goals->shrink_to_fit();
     box_index.shrink_to_fit();
+    m_goals.reset(_m_goals);
+    m_empty_room.reset(_m_empty_room);
 }
 
 bool BoardParam::man_move(Direction &d)
