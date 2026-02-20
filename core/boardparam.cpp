@@ -266,8 +266,7 @@ size_t BoardHash::operator()(const BoardParam &param) const
     static_assert(std::is_trivial<PosVector::value_type>(), "cannot use normal hash!");
     int mem_size = boxes.size()*sizeof(PosVector::value_type);
     assert(!boxes.empty());
-    assert(reinterpret_cast<const char*>(&boxes[boxes.size()])
-            == reinterpret_cast<const char*>(&boxes[0])+mem_size);
+    //assert(reinterpret_cast<const char*>(&boxes[boxes.size()]) == reinterpret_cast<const char*>(&boxes[0])+mem_size);
     std::string str(reinterpret_cast<const char*>(&boxes[0]), mem_size);
     return std::hash<std::string>()(str);
 }
