@@ -10,6 +10,8 @@
 class BoardParam
 {
 public:
+    BoardParam();
+    void try_del_pointer();
     //初始化函数
     void set_matrix(const ElementsMatrix &m);
 
@@ -26,7 +28,7 @@ public:
     }
     const PosVector *goals() const
     {
-        return m_goals.get();
+        return m_goals;
     }
     const PosVector &boxes() const { return box_index; }
 
@@ -36,7 +38,7 @@ public:
     const ElementsMatrix *empty_room() const
     {
         assert(m_empty_room!=nullptr);
-        return m_empty_room.get();
+        return m_empty_room;
     }
 
     //空的即是说，不是墙，也不是box
@@ -71,15 +73,16 @@ private:
 public:
     bool precise_equal(const BoardParam &param) const;
     bool like_equal(const BoardParam &param) const;
+
 private:
     //人所在的位置
     Pos man_pos;
     // box 的索引
     PosVector box_index;
     //目标位置, set之后就不会变了
-    std::shared_ptr<const PosVector> m_goals;
+    const PosVector *m_goals;
     //只包含 wall floor的"空"房子,和goals一样，set之后就不会变了
-    std::shared_ptr<const ElementsMatrix> m_empty_room;
+    const ElementsMatrix *m_empty_room;
 };
 
 bool operator == (const BoardParam &p1, const BoardParam &p2);

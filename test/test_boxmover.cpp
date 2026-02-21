@@ -12,5 +12,5 @@ void test_boxmover()
     for (const auto &p : lst) {
         print(p);
     }
-
+    param.try_del_pointer();
 }

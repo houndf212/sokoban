@@ -9,8 +9,14 @@ BoardWidget::BoardWidget(QWidget *parent)
 {
 }
 
+BoardWidget::~BoardWidget()
+{
+    board.try_del_pointer();
+}
+
 void BoardWidget::setMatrix(const ElementsMatrix &m)
 {
+    board.try_del_pointer();
     board.set_matrix(m);
     buffer_pix = QPixmap(m.col_size()*k_width, m.row_size()*k_height);
     setFixedSize(buffer_pix.size());

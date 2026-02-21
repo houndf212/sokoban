@@ -31,4 +31,5 @@ void test_matrixgraph()
 
     auto path = g.shortest_path(p_start, p_end);
     print(path);
+    start.try_del_pointer();
 }

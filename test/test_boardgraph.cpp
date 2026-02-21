@@ -29,4 +29,5 @@ void test_baordgraph()
         auto mlst = BoardGraph::solve(start);
         print(mlst);
     }
+    start.try_del_pointer();
 }

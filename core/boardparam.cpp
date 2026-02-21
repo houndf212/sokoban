@@ -1,6 +1,30 @@
 ﻿#include "boardparam.h"
 #include "roomslice.h"
 #include <algorithm>
+#include <functional>
+#include <unordered_map>
+
+BoardParam::BoardParam()
+    :m_goals(nullptr)
+    ,m_empty_room(nullptr)
+{
+
+}
+
+void BoardParam::try_del_pointer()
+{
+    if (nullptr != m_goals)
+    {
+        delete m_goals;
+        delete m_empty_room;
+        m_goals = nullptr;
+        m_empty_room = nullptr;
+    }
+    else
+    {
+        assert(nullptr == m_empty_room);
+    }
+}
 
 void BoardParam::set_matrix(const ElementsMatrix &m)
 {
@@ -42,8 +66,9 @@ void BoardParam::set_matrix(const ElementsMatrix &m)
 
     _m_goals->shrink_to_fit();
     box_index.shrink_to_fit();
-    m_goals.reset(_m_goals);
-    m_empty_room.reset(_m_empty_room);
+
+    m_goals = _m_goals;
+    m_empty_room = _m_empty_room;
 }
 
 bool BoardParam::man_move(Direction &d)
@@ -268,6 +293,12 @@ size_t BoardHash::operator()(const BoardParam &param) const
     int mem_size = boxes.size()*sizeof(PosVector::value_type);
     assert(!boxes.empty());
     //assert(reinterpret_cast<const char*>(&boxes[boxes.size()]) == reinterpret_cast<const char*>(&boxes[0])+mem_size);
+
+#if 0
     std::string str(reinterpret_cast<const char*>(&boxes[0]), mem_size);
     return std::hash<std::string>()(str);
+#else
+
+    return std::_Hash_impl::hash(boxes.data(), mem_size);
+#endif
 }

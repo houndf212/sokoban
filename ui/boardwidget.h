@@ -8,6 +8,7 @@ class BoardWidget : public QWidget
 {
 public:
     explicit BoardWidget(QWidget *parent=nullptr);
+    ~BoardWidget();
 
     void setMatrix(const ElementsMatrix &m);
     BoardParam getBoard() const { return board; }

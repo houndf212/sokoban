@@ -36,4 +36,5 @@ void test_console_board()
         }
         print(board.to_matrix());
     }
+    board.try_del_pointer();
 }
